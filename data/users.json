@@ -83,10 +83,12 @@
       "unit": "celsius",
       "hasCompletedOnboarding": true,
       "removedWidgetIds": [],
-      "customAddedWidgetIds": [],
-      "isCustomLifestyle": false
+      "customAddedWidgetIds": [
+        "family_commute"
+      ],
+      "isCustomLifestyle": true
     },
-    "updatedAt": "2026-09-04T11:32:30.458Z"
+    "updatedAt": "2026-09-04T12:17:39.554Z"
   },
   {
     "id": "usr_1788473617963_1wn9y6",
@@ -96,7 +98,14 @@
     "createdAt": "2026-09-03T22:13:37.963Z",
     "preferences": {
       "activePersonas": [
-        "events"
+        "events",
+        "beach",
+        "family",
+        "commuter",
+        "farming",
+        "health",
+        "travel",
+        "fitness"
       ],
       "answers": {
         "health_sensitivity": "aqi_pm25",
@@ -118,7 +127,7 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T11:43:34.843Z"
+    "updatedAt": "2026-09-04T12:25:23.985Z"
   },
   {
     "id": "usr_1788513870055_v5ofj2",
@@ -129,7 +138,13 @@
     "preferences": {
       "activePersonas": [
         "events",
-        "health"
+        "health",
+        "fitness",
+        "farming",
+        "travel",
+        "family",
+        "commuter",
+        "beach"
       ],
       "answers": {
         "health_sensitivity": "aqi_pm25",
@@ -151,15 +166,16 @@
         "humidity_heat",
         "sunrise_sunset",
         "visibility_pressure",
-        "rain_probability",
-        "wind_metrics",
+        "wind_metrics"
+      ],
+      "customAddedWidgetIds": [
         "event_forecast",
+        "rain_probability",
         "uv_index"
       ],
-      "customAddedWidgetIds": [],
       "isCustomLifestyle": true
     },
-    "updatedAt": "2026-09-04T11:47:34.613Z"
+    "updatedAt": "2026-09-04T11:57:51.607Z"
   },
   {
     "id": "usr_1788521564723_ysr2j4",
@@ -224,7 +240,7 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T11:42:39.254Z"
+    "updatedAt": "2026-09-04T12:17:14.294Z"
   },
   {
     "id": "usr_1788522282133_ubn2cg",
@@ -234,8 +250,7 @@
     "createdAt": "2026-09-04T11:44:42.133Z",
     "preferences": {
       "activePersonas": [
-        "health",
-        "commuter"
+        "health"
       ],
       "answers": {
         "health_sensitivity": "aqi_pm25",
@@ -257,7 +272,7 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T11:48:10.391Z"
+    "updatedAt": "2026-09-04T12:17:11.955Z"
   },
   {
     "id": "usr_1788522376503_91dslm",
@@ -267,11 +282,10 @@
     "createdAt": "2026-09-04T11:46:16.503Z",
     "preferences": {
       "activePersonas": [
-        "health",
-        "travel"
+        "health"
       ],
       "answers": {
-        "health_sensitivity": "aqi_pm25",
+        "health_sensitivity": "general_wellness",
         "travel_scope": "domestic",
         "farming_type": "crop_farmer",
         "workout_window": "early_morning",
@@ -290,6 +304,6 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T11:52:14.776Z"
+    "updatedAt": "2026-09-04T12:20:41.038Z"
   }
 ]

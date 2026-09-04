@@ -48,14 +48,14 @@ export function HomeScreen() {
 
       {/* 3. TIER 1: HIGH-PRIORITY PERSONALIZED WIDGETS */}
       <div className="mb-5 space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-sky-400" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+        <div className="flex items-center justify-between px-1 gap-2">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <Sparkles className="w-4 h-4 text-sky-400 flex-shrink-0" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 truncate">
               {isCustomLifestyle ? "Customized Priority Widgets" : "Personalized Priority Widgets"}
             </h3>
           </div>
-          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border whitespace-nowrap flex-shrink-0 ${
             isCustomLifestyle 
               ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' 
               : 'bg-sky-500/10 text-sky-400 border-sky-500/20'
@@ -124,14 +124,14 @@ export function HomeScreen() {
       {/* 5. TIER 2: ESSENTIAL WEATHER METRICS (Universal tiles) */}
       {prioritized.secondary.length > 0 && (
         <div className="mb-5 space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-1.5">
-              <LayoutGrid className="w-4 h-4 text-slate-400" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <div className="flex items-center justify-between px-1 gap-2">
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              <LayoutGrid className="w-4 h-4 text-slate-400 flex-shrink-0" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 truncate">
                 Essential Weather Conditions
               </h3>
             </div>
-            <span className="text-[10px] text-slate-500">Universal Metrics</span>
+            <span className="text-[10px] text-slate-500 whitespace-nowrap flex-shrink-0">Universal Metrics</span>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

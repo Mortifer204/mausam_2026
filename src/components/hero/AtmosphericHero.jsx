@@ -68,7 +68,7 @@ export function AtmosphericHero() {
     .join(' + ');
 
   return (
-    <div className={`relative w-full rounded-3xl p-6 bg-gradient-to-b ${theme.gradient} border border-white/15 shadow-2xl overflow-hidden mb-5 transition-all duration-500`}>
+    <div className={`relative w-full rounded-3xl p-4 sm:p-6 bg-gradient-to-b ${theme.gradient} border border-white/15 shadow-2xl overflow-hidden mb-5 transition-all duration-500`}>
       {/* Ambient background glow orb */}
       <div 
         className="absolute -top-20 -right-20 w-64 h-64 rounded-full blur-3xl pointer-events-none opacity-40"
@@ -77,17 +77,17 @@ export function AtmosphericHero() {
 
       <div className="relative z-10">
         {/* Top: Persona Indicator Pill */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-semibold text-sky-300">
-            <Sparkles className="w-3 h-3 text-sky-400" />
-            <span className="truncate max-w-[200px]">Tailored for: {personaTitles || "General"}</span>
+        <div className="flex items-center justify-between mb-3 gap-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-semibold text-sky-300 min-w-0 flex-1 mr-1 overflow-hidden">
+            <Sparkles className="w-3 h-3 text-sky-400 flex-shrink-0" />
+            <span className="truncate">{personaTitles ? `Tailored for: ${personaTitles}` : "General"}</span>
           </div>
 
-          <div className="text-[11px] text-slate-300 font-medium flex items-center gap-1.5">
-            <span className={`w-2 h-2 rounded-full ${isRefreshing ? 'bg-amber-400 animate-ping' : 'bg-emerald-400 animate-pulse'}`} />
-            <span>
+          <div className="text-[11px] text-slate-300 font-medium flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+            <span className={`w-2 h-2 rounded-full flex-shrink-0 ${isRefreshing ? 'bg-amber-400 animate-ping' : 'bg-emerald-400 animate-pulse'}`} />
+            <span className="whitespace-nowrap font-sans">
               {isRefreshing 
-                ? 'Syncing Live Data...' 
+                ? 'Syncing...' 
                 : lastRefreshedAt 
                 ? `Live • ${new Intl.DateTimeFormat('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true }).format(lastRefreshedAt)}` 
                 : current.updatedAgo}
