@@ -64,7 +64,12 @@
     "preferences": {
       "activePersonas": [
         "health",
-        "travel"
+        "fitness",
+        "farming",
+        "travel",
+        "family",
+        "commuter",
+        "beach"
       ],
       "answers": {
         "health_sensitivity": "aqi_pm25",
@@ -83,12 +88,10 @@
       "unit": "celsius",
       "hasCompletedOnboarding": true,
       "removedWidgetIds": [],
-      "customAddedWidgetIds": [
-        "family_commute"
-      ],
-      "isCustomLifestyle": true
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T12:17:39.554Z"
+    "updatedAt": "2026-09-04T17:09:00.223Z"
   },
   {
     "id": "usr_1788473617963_1wn9y6",
@@ -119,7 +122,9 @@
         "delhi",
         "punjab_farm",
         "bengaluru",
-        "goa"
+        "goa",
+        "live_25.25952096001616_87.03949477165966",
+        "live_26.83928_80.92313"
       ],
       "unit": "celsius",
       "hasCompletedOnboarding": true,
@@ -127,7 +132,7 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T12:25:23.985Z"
+    "updatedAt": "2026-09-04T16:49:33.427Z"
   },
   {
     "id": "usr_1788513870055_v5ofj2",
@@ -250,7 +255,7 @@
     "createdAt": "2026-09-04T11:44:42.133Z",
     "preferences": {
       "activePersonas": [
-        "health"
+        "travel"
       ],
       "answers": {
         "health_sensitivity": "aqi_pm25",
@@ -272,7 +277,7 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T12:17:11.955Z"
+    "updatedAt": "2026-09-04T14:46:48.515Z"
   },
   {
     "id": "usr_1788522376503_91dslm",
@@ -282,7 +287,7 @@
     "createdAt": "2026-09-04T11:46:16.503Z",
     "preferences": {
       "activePersonas": [
-        "health"
+        "fitness"
       ],
       "answers": {
         "health_sensitivity": "general_wellness",
@@ -304,6 +309,39 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T12:20:41.038Z"
+    "updatedAt": "2026-09-04T17:14:11.394Z"
+  },
+  {
+    "id": "usr_1788525184894_j7e5a5",
+    "name": "Yash kumar",
+    "email": "yash.kmx@gmail.com",
+    "password": "12345678",
+    "createdAt": "2026-09-04T12:33:04.894Z",
+    "preferences": {
+      "activePersonas": [
+        "health",
+        "travel"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T17:14:13.005Z"
   }
 ]
