@@ -63,77 +63,7 @@
     "createdAt": "2026-09-03T22:03:43.982Z",
     "preferences": {
       "activePersonas": [
-        "health"
-      ],
-      "answers": {
-        "health_sensitivity": "aqi_pm25",
-        "travel_scope": "domestic",
-        "farming_type": "crop_farmer",
-        "workout_window": "early_morning",
-        "commute_mode": "car_drive"
-      },
-      "pinnedWidgetIds": [],
-      "savedLocationIds": [
-        "delhi",
-        "punjab_farm",
-        "bengaluru",
-        "goa"
-      ],
-      "unit": "celsius",
-      "hasCompletedOnboarding": true,
-      "removedWidgetIds": [],
-      "customAddedWidgetIds": [],
-      "isCustomLifestyle": false
-    },
-    "updatedAt": "2026-09-04T10:21:06.411Z"
-  },
-  {
-    "id": "usr_1788473617963_1wn9y6",
-    "name": "guest2",
-    "email": "example1@gmail.com",
-    "password": "123456",
-    "createdAt": "2026-09-03T22:13:37.963Z",
-    "preferences": {
-      "activePersonas": [
-        "travel",
-        "fitness",
         "health",
-        "farming",
-        "family",
-        "commuter",
-        "beach",
-        "events"
-      ],
-      "answers": {
-        "health_sensitivity": "aqi_pm25",
-        "travel_scope": "domestic",
-        "farming_type": "crop_farmer",
-        "workout_window": "early_morning",
-        "commute_mode": "car_drive"
-      },
-      "pinnedWidgetIds": [],
-      "savedLocationIds": [
-        "delhi",
-        "punjab_farm",
-        "bengaluru",
-        "goa"
-      ],
-      "unit": "celsius",
-      "hasCompletedOnboarding": true,
-      "removedWidgetIds": [],
-      "customAddedWidgetIds": [],
-      "isCustomLifestyle": false
-    },
-    "updatedAt": "2026-09-04T10:28:17.371Z"
-  },
-  {
-    "id": "usr_1788513870055_v5ofj2",
-    "name": "Adi",
-    "email": "abc@gmail.com",
-    "password": "1234",
-    "createdAt": "2026-09-04T09:24:30.055Z",
-    "preferences": {
-      "activePersonas": [
         "travel"
       ],
       "answers": {
@@ -156,6 +86,210 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T09:27:59.412Z"
+    "updatedAt": "2026-09-04T11:32:30.458Z"
+  },
+  {
+    "id": "usr_1788473617963_1wn9y6",
+    "name": "guest2",
+    "email": "example1@gmail.com",
+    "password": "123456",
+    "createdAt": "2026-09-03T22:13:37.963Z",
+    "preferences": {
+      "activePersonas": [
+        "events"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "roadtrips",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T11:43:34.843Z"
+  },
+  {
+    "id": "usr_1788513870055_v5ofj2",
+    "name": "Adi",
+    "email": "abc@gmail.com",
+    "password": "1234",
+    "createdAt": "2026-09-04T09:24:30.055Z",
+    "preferences": {
+      "activePersonas": [
+        "events",
+        "health"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [
+        "humidity_heat",
+        "sunrise_sunset",
+        "visibility_pressure",
+        "rain_probability",
+        "wind_metrics",
+        "event_forecast",
+        "uv_index"
+      ],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": true
+    },
+    "updatedAt": "2026-09-04T11:47:34.613Z"
+  },
+  {
+    "id": "usr_1788521564723_ysr2j4",
+    "name": "sih1",
+    "email": "abcd123@gmail.com",
+    "password": "123456",
+    "createdAt": "2026-09-04T11:32:44.723Z",
+    "preferences": {
+      "activePersonas": [
+        "health",
+        "travel"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T11:36:28.138Z"
+  },
+  {
+    "id": "usr_1788521826722_g5vqf6",
+    "name": "sih2",
+    "email": "abcd1233@gmail.com",
+    "password": "123456",
+    "createdAt": "2026-09-04T11:37:06.722Z",
+    "preferences": {
+      "activePersonas": [
+        "health"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T11:42:39.254Z"
+  },
+  {
+    "id": "usr_1788522282133_ubn2cg",
+    "name": "sih2",
+    "email": "abcd12355@gmail.com",
+    "password": "123456",
+    "createdAt": "2026-09-04T11:44:42.133Z",
+    "preferences": {
+      "activePersonas": [
+        "health",
+        "commuter"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T11:48:10.391Z"
+  },
+  {
+    "id": "usr_1788522376503_91dslm",
+    "name": "Sih3",
+    "email": "abcd12@gmail.com",
+    "password": "123456",
+    "createdAt": "2026-09-04T11:46:16.503Z",
+    "preferences": {
+      "activePersonas": [
+        "health",
+        "travel"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T11:52:14.776Z"
   }
 ]

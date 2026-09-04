@@ -89,7 +89,7 @@ export function AtmosphericHero() {
               {isRefreshing 
                 ? 'Syncing Live Data...' 
                 : lastRefreshedAt 
-                ? `Live • ${new Intl.DateTimeFormat('en-IN', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }).format(lastRefreshedAt)}` 
+                ? `Live • ${new Intl.DateTimeFormat('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true }).format(lastRefreshedAt)}` 
                 : current.updatedAgo}
             </span>
           </div>

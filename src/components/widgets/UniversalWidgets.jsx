@@ -19,12 +19,12 @@ export function RainProbabilityWidget({ weatherData, onSelect }) {
   return (
     <div 
       onClick={() => onSelect?.('rain_probability')}
-      className="glass-card-interactive rounded-3xl p-4 border border-white/10 cursor-pointer relative"
+      className="glass-card-interactive rounded-3xl p-3.5 border border-white/10 cursor-pointer relative overflow-hidden"
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-cyan-400">
-          <CloudRain className="w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Rain Probability</span>
+      <div className="flex items-start justify-between mb-2 gap-1">
+        <div className="flex items-center gap-1.5 text-cyan-400 min-w-0 pr-1">
+          <CloudRain className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-tight">Rain Probability</span>
         </div>
         <WidgetHeaderActions widgetId="rain_probability" />
       </div>
@@ -32,7 +32,7 @@ export function RainProbabilityWidget({ weatherData, onSelect }) {
       <div className="text-2xl font-extrabold text-white mt-1">
         {pop}%
       </div>
-      <div className="text-[11px] text-slate-400 mt-0.5">
+      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
         {pop > 60 ? 'Heavy precipitation expected' : pop > 30 ? 'Scattered rain possible' : 'Dry conditions likely'}
       </div>
 
@@ -54,12 +54,12 @@ export function UvIndexWidget({ weatherData, onSelect }) {
   return (
     <div 
       onClick={() => onSelect?.('uv_index')}
-      className="glass-card-interactive rounded-3xl p-4 border border-white/10 cursor-pointer relative"
+      className="glass-card-interactive rounded-3xl p-3.5 border border-white/10 cursor-pointer relative overflow-hidden"
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-amber-400">
-          <Sun className="w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">UV Exposure</span>
+      <div className="flex items-start justify-between mb-2 gap-1">
+        <div className="flex items-center gap-1.5 text-amber-400 min-w-0 pr-1">
+          <Sun className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-tight">UV Exposure</span>
         </div>
         <WidgetHeaderActions widgetId="uv_index" />
       </div>
@@ -68,7 +68,7 @@ export function UvIndexWidget({ weatherData, onSelect }) {
         <span className={`text-2xl font-extrabold ${uvColor}`}>{uv}</span>
         <span className="text-xs font-semibold text-slate-300">{uvCategory}</span>
       </div>
-      <div className="text-[11px] text-slate-400 mt-0.5">
+      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
         {uv >= 6 ? 'Apply SPF 30+ outdoors' : 'Standard sun exposure safe'}
       </div>
 
@@ -88,12 +88,12 @@ export function WindMetricsWidget({ weatherData, onSelect }) {
   return (
     <div 
       onClick={() => onSelect?.('wind_metrics')}
-      className="glass-card-interactive rounded-3xl p-4 border border-white/10 cursor-pointer relative"
+      className="glass-card-interactive rounded-3xl p-3.5 border border-white/10 cursor-pointer relative overflow-hidden"
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-teal-400">
-          <Wind className="w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Wind Dynamics</span>
+      <div className="flex items-start justify-between mb-2 gap-1">
+        <div className="flex items-center gap-1.5 text-teal-400 min-w-0 pr-1">
+          <Wind className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-tight">Wind Dynamics</span>
         </div>
         <WidgetHeaderActions widgetId="wind_metrics" />
       </div>
@@ -101,9 +101,9 @@ export function WindMetricsWidget({ weatherData, onSelect }) {
       <div className="flex items-baseline gap-1 mt-1">
         <span className="text-2xl font-extrabold text-white">{current.windSpeed}</span>
         <span className="text-xs text-slate-400 font-medium">km/h</span>
-        <span className="text-xs font-bold text-teal-300 ml-1">Direction {current.windDirection}</span>
+        <span className="text-xs font-bold text-teal-300 ml-1 truncate">{current.windDirection}</span>
       </div>
-      <div className="text-[11px] text-slate-400 mt-0.5">
+      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
         Gusts reaching {current.windGust || current.windSpeed + 12} km/h
       </div>
     </div>
@@ -116,12 +116,12 @@ export function HumidityHeatWidget({ weatherData, onSelect }) {
   return (
     <div 
       onClick={() => onSelect?.('humidity_heat')}
-      className="glass-card-interactive rounded-3xl p-4 border border-white/10 cursor-pointer relative"
+      className="glass-card-interactive rounded-3xl p-3.5 border border-white/10 cursor-pointer relative overflow-hidden"
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-sky-400">
-          <Droplets className="w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Humidity & Dew</span>
+      <div className="flex items-start justify-between mb-2 gap-1">
+        <div className="flex items-center gap-1.5 text-sky-400 min-w-0 pr-1">
+          <Droplets className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-tight">Humidity & Dew</span>
         </div>
         <WidgetHeaderActions widgetId="humidity_heat" />
       </div>
@@ -129,7 +129,7 @@ export function HumidityHeatWidget({ weatherData, onSelect }) {
       <div className="text-2xl font-extrabold text-white mt-1">
         {current.humidity}%
       </div>
-      <div className="text-[11px] text-slate-400 mt-0.5">
+      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
         Dew point is {current.dewPoint || 21}°C right now
       </div>
     </div>
@@ -142,12 +142,12 @@ export function SunriseSunsetWidget({ weatherData, onSelect }) {
   return (
     <div 
       onClick={() => onSelect?.('sunrise_sunset')}
-      className="glass-card-interactive rounded-3xl p-4 border border-white/10 cursor-pointer relative"
+      className="glass-card-interactive rounded-3xl p-3.5 border border-white/10 cursor-pointer relative overflow-hidden"
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-amber-300">
-          <Sunrise className="w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Solar Cycle</span>
+      <div className="flex items-start justify-between mb-2 gap-1">
+        <div className="flex items-center gap-1.5 text-amber-300 min-w-0 pr-1">
+          <Sunrise className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-tight">Solar Cycle</span>
         </div>
         <WidgetHeaderActions widgetId="sunrise_sunset" />
       </div>
@@ -172,12 +172,12 @@ export function VisibilityPressureWidget({ weatherData, onSelect }) {
   return (
     <div 
       onClick={() => onSelect?.('visibility_pressure')}
-      className="glass-card-interactive rounded-3xl p-4 border border-white/10 cursor-pointer relative"
+      className="glass-card-interactive rounded-3xl p-3.5 border border-white/10 cursor-pointer relative overflow-hidden"
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-indigo-400">
-          <Gauge className="w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Atmosphere</span>
+      <div className="flex items-start justify-between mb-2 gap-1">
+        <div className="flex items-center gap-1.5 text-indigo-400 min-w-0 pr-1">
+          <Gauge className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-tight">Atmosphere</span>
         </div>
         <WidgetHeaderActions widgetId="visibility_pressure" />
       </div>
