@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Sparkles, 
   Check, 
@@ -62,16 +62,18 @@ export function OnboardingModal({ isOpen, onClose }) {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasPromptedGps, setHasPromptedGps] = useState(false);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !wasOpenRef.current) {
       setStep(1);
       setSelectedLocId(activeLocationId);
       setHasPromptedGps(false);
       setSearchQuery('');
       setSearchResults([]);
     }
-  }, [isOpen, activeLocationId]);
+    wasOpenRef.current = isOpen;
+  }, [isOpen]);
 
   // Auto-prompt GPS when step 3 is reached
   useEffect(() => {
