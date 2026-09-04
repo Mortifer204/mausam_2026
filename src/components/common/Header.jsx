@@ -149,7 +149,7 @@ export function Header({ onOpenPersonaModal, onOpenLocationModal }) {
                               <div className="text-[10px] text-slate-400 truncate">{loc.district || loc.state}</div>
                             </button>
                             <div className="flex items-center gap-1.5 flex-shrink-0">
-                              <span className="text-xs font-semibold">{loc.current.temp}°C</span>
+                              <span className="text-xs font-semibold">{loc.current?.temp ?? loc.temp ?? "--"}°C</span>
                               {isSelected && <Check className="w-3.5 h-3.5 text-sky-400" />}
                               {allLocations.length > 1 && (
                                 <button

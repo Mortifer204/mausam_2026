@@ -62,9 +62,20 @@ export function WeatherProvider({ children }) {
       state: l.state,
       district: l.district,
       coords: l.coords,
-      isLive: l.isLive,
-      temp: l.current?.temp ?? l.temp,
-      condition: l.current?.condition ?? l.condition
+      isLive: l.isLive ?? true,
+      temp: l.current?.temp ?? l.temp ?? 27,
+      condition: l.current?.condition ?? l.condition ?? "Clear",
+      current: {
+        temp: l.current?.temp ?? l.temp ?? 27,
+        condition: l.current?.condition ?? l.condition ?? "Clear",
+        conditionCode: l.current?.conditionCode || "clear",
+        feelsLike: l.current?.feelsLike ?? l.current?.temp ?? l.temp ?? 27,
+        humidity: l.current?.humidity ?? 60,
+        windSpeed: l.current?.windSpeed ?? 10,
+        windDirection: l.current?.windDirection ?? "NW",
+        uv: l.current?.uv ?? 4,
+        aqi: l.current?.aqi ?? 45
+      }
     }));
 
     fetch('/api/user/preferences', {
@@ -111,7 +122,23 @@ export function WeatherProvider({ children }) {
         if (Array.isArray(atlasLocations) && atlasLocations.length > 0) {
           const uniqueMap = new Map();
           atlasLocations.forEach(loc => {
-            if (loc?.name) uniqueMap.set(loc.name.trim().toLowerCase(), loc);
+            if (loc?.name) {
+              const safeCurrent = loc.current || {
+                temp: loc.temp ?? 27,
+                condition: loc.condition ?? "Clear",
+                conditionCode: "clear",
+                feelsLike: loc.temp ?? 27,
+                humidity: 60,
+                windSpeed: 10,
+                windDirection: "NW",
+                uv: 4,
+                aqi: 45
+              };
+              uniqueMap.set(loc.name.trim().toLowerCase(), {
+                ...loc,
+                current: safeCurrent
+              });
+            }
           });
           const cleanList = Array.from(uniqueMap.values());
           setRealLocations(cleanList);
@@ -143,8 +170,22 @@ export function WeatherProvider({ children }) {
               }
             }
           }
+
+          // Background refresh all non-active locations to get live real-time temperatures for the dropdown
+          cleanList.forEach(async (loc) => {
+            if (loc.id !== targetActiveId && loc.coords) {
+              try {
+                const fresh = await fetchRealtimeWeather(loc.coords.lat, loc.coords.lon, loc.name, loc.state, loc.district);
+                if (isMounted) {
+                  setRealLocations(prev => prev.map(p => p.id === loc.id ? { ...p, current: fresh.current, isLive: true } : p));
+                }
+              } catch (e) {
+                // Keep default values
+              }
+            }
+          });
         } else if (realLocations.length > 0) {
-          // If Atlas has no saved locations yet, seed it with the current local locations!
+          // If Atlas has no saved locations yet, seed it with current local locations
           syncLocationsToAtlas(realLocations, activeLocationId);
         }
       })
