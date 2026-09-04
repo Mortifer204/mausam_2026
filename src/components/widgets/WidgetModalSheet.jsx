@@ -1,0 +1,202 @@
+import React from 'react';
+import { ModalSheet } from '../common/ModalSheet';
+import { 
+  HeartPulse, 
+  Flame, 
+  Plane, 
+  Sprout, 
+  Car, 
+  Waves, 
+  Users, 
+  CalendarCheck,
+  ShieldCheck,
+  Pin,
+  Check
+} from 'lucide-react';
+import { usePersonalization } from '../../context/PersonalizationContext';
+
+export function WidgetModalSheet({ selectedWidgetKey, onClose, weatherData }) {
+  const { pinnedWidgetIds, togglePinWidget } = usePersonalization();
+
+  if (!selectedWidgetKey) return null;
+
+  const isPinned = pinnedWidgetIds.includes(selectedWidgetKey);
+
+  const renderContent = () => {
+    switch (selectedWidgetKey) {
+      case 'health_aqi': {
+        const health = weatherData.specialized?.health;
+        return (
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Air Quality Index</span>
+                  <div className="text-3xl font-extrabold text-white mt-0.5">{health?.aqi} AQI</div>
+                </div>
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  {health?.category}
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-2 leading-relaxed">{health?.actionGuideline}</p>
+            </div>
+
+            <div className="space-y-2">
+              <h5 className="text-xs font-bold uppercase tracking-wider text-slate-400">Detailed Pollutant Breakdown</h5>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                  <span className="text-[10px] text-slate-400">PM2.5 (Fine Particulate)</span>
+                  <div className="text-base font-bold text-white mt-0.5">{health?.pm25Value} µg/m³</div>
+                  <span className="text-[10px] text-rose-400">Exceeds WHO guideline</span>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                  <span className="text-[10px] text-slate-400">PM10 (Coarse Dust)</span>
+                  <div className="text-base font-bold text-white mt-0.5">{health?.pm10Value} µg/m³</div>
+                  <span className="text-[10px] text-amber-400">Moderate levels</span>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                  <span className="text-[10px] text-slate-400">Pollen Sensitivity</span>
+                  <div className="text-base font-bold text-white mt-0.5">{health?.pollenLevel}</div>
+                  <span className="text-[10px] text-slate-400">Grass & weed airborne</span>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                  <span className="text-[10px] text-slate-400">Ground Ozone (O3)</span>
+                  <div className="text-base font-bold text-white mt-0.5">42 ppb</div>
+                  <span className="text-[10px] text-emerald-400">Normal</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-xs text-slate-300 space-y-1">
+              <div className="font-bold text-slate-200">Recommended Safeguards:</div>
+              <div className="flex items-center gap-2 text-[11px]"><Check className="w-3.5 h-3.5 text-emerald-400" /> Keep indoor air purifiers running on auto-mode</div>
+              <div className="flex items-center gap-2 text-[11px]"><Check className="w-3.5 h-3.5 text-emerald-400" /> Avoid high-intensity outdoor cardio between 1 PM and 5 PM</div>
+            </div>
+          </div>
+        );
+      }
+
+      case 'farming_agro': {
+        const farm = weatherData.specialized?.farming;
+        return (
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-green-500/10 border border-green-500/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] text-green-400 font-bold uppercase tracking-wider">Root-Zone Saturation</span>
+                  <div className="text-3xl font-extrabold text-green-400 mt-0.5">{farm?.soilMoisture}%</div>
+                </div>
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-500/30">
+                  Optimal Condition
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-2 leading-relaxed">{farm?.cropAdvisory}</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <span className="text-[10px] text-slate-400">Soil Temperature</span>
+                <div className="text-base font-bold text-white mt-0.5">{farm?.soilTemp}°C</div>
+                <span className="text-[10px] text-green-400">Optimal microbial activity</span>
+              </div>
+              <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <span className="text-[10px] text-slate-400">Evapotranspiration</span>
+                <div className="text-base font-bold text-white mt-0.5">{farm?.evapotranspiration} mm/day</div>
+                <span className="text-[10px] text-slate-400">Low water loss</span>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      case 'fitness_running': {
+        const fit = weatherData.specialized?.fitness;
+        return (
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Workout Quality Score</span>
+                  <div className="text-3xl font-extrabold text-amber-400 mt-0.5">{fit?.runningScore} / 100</div>
+                </div>
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  {fit?.status}
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-2 leading-relaxed">{fit?.hydrationAdvice}</p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+              <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-1">Optimal Window</span>
+              <div className="text-sm font-bold text-white">{fit?.bestWindow}</div>
+            </div>
+          </div>
+        );
+      }
+
+      case 'travel_packing': {
+        const travel = weatherData.specialized?.travel;
+        return (
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-sky-500/10 border border-sky-500/20">
+              <div className="text-[10px] text-sky-400 font-bold uppercase tracking-wider">In-Transit Weather Status</div>
+              <div className="text-base font-bold text-white mt-1">{travel?.transitStatus}</div>
+              <p className="text-xs text-slate-300 mt-1 leading-relaxed">{travel?.advisory}</p>
+            </div>
+
+            <div>
+              <h5 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Packing Checklist for Destination</h5>
+              <div className="space-y-1.5">
+                {travel?.packingList.map((item, i) => (
+                  <div key={i} className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs text-slate-200">
+                    <span>{item.item}</span>
+                    {item.essential && <span className="text-[9px] font-bold text-rose-300 px-1.5 py-0.5 rounded bg-rose-500/20">Essential</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      default:
+        return (
+          <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center text-xs text-slate-300">
+            Real-time meteorological analytics verified by the India Meteorological Department.
+          </div>
+        );
+    }
+  };
+
+  return (
+    <ModalSheet
+      isOpen={!!selectedWidgetKey}
+      onClose={onClose}
+      title="Detailed Meteorological Intelligence"
+      subtitle="MoES / IMD Analytical Drilldown"
+    >
+      {renderContent()}
+
+      <div className="pt-2 flex items-center justify-between border-t border-white/10">
+        <button
+          onClick={() => togglePinWidget(selectedWidgetKey)}
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition ${
+            isPinned 
+              ? 'bg-sky-500/20 border-sky-400 text-sky-300' 
+              : 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
+          }`}
+        >
+          <Pin className="w-3.5 h-3.5" />
+          {isPinned ? 'Pinned to Top Priority' : 'Pin Widget to Top'}
+        </button>
+
+        <button
+          onClick={onClose}
+          className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-semibold transition"
+        >
+          Done
+        </button>
+      </div>
+    </ModalSheet>
+  );
+}
