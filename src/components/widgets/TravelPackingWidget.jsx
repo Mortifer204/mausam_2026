@@ -220,9 +220,9 @@ export function TravelPackingWidget({ weatherData, onSelect, isHero = false }) {
     return 0;
   });
 
-  // Display only up to 4 items when collapsed
-  const displayedPackingList = isExpanded ? sortedPackingList : sortedPackingList.slice(0, 4);
-  const remainingCount = Math.max(0, sortedPackingList.length - 4);
+  // Display only up to 2 items when collapsed
+  const displayedPackingList = isExpanded ? sortedPackingList : sortedPackingList.slice(0, 2);
+  const remainingCount = Math.max(0, sortedPackingList.length - 2);
 
   return (
     <div 
@@ -445,7 +445,7 @@ export function TravelPackingWidget({ weatherData, onSelect, isHero = false }) {
         </div>
 
         {/* Extend / Minimize Toggle Button */}
-        {sortedPackingList.length > 4 && (
+        {sortedPackingList.length > 2 && (
           <button
             onClick={(e) => {
               e.stopPropagation();

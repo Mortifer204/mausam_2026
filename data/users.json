@@ -63,9 +63,7 @@
     "createdAt": "2026-09-03T22:03:43.982Z",
     "preferences": {
       "activePersonas": [
-        "commuter",
-        "family",
-        "farming"
+        "health"
       ],
       "answers": {
         "health_sensitivity": "aqi_pm25",
@@ -87,7 +85,7 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T09:21:08.128Z"
+    "updatedAt": "2026-09-04T10:21:06.411Z"
   },
   {
     "id": "usr_1788473617963_1wn9y6",
@@ -126,7 +124,7 @@
       "customAddedWidgetIds": [],
       "isCustomLifestyle": false
     },
-    "updatedAt": "2026-09-04T09:17:32.345Z"
+    "updatedAt": "2026-09-04T10:28:17.371Z"
   },
   {
     "id": "usr_1788513870055_v5ofj2",
