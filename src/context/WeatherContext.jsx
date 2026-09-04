@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { useAuth } from './AuthContext';
 import { 
   fetchRealtimeWeather, 
   reverseGeocodeCoords, 
@@ -12,12 +13,22 @@ const STORAGE_LOCATIONS_KEY = 'mausam_real_locations_v2';
 const STORAGE_ACTIVE_ID_KEY = 'mausam_real_active_id_v2';
 
 export function WeatherProvider({ children }) {
+  const { user } = useAuth();
+
+  const userStorageKey = user?.email 
+    ? `mausam_real_locations_${user.email}` 
+    : STORAGE_LOCATIONS_KEY;
+  const userActiveKey = user?.email 
+    ? `mausam_real_active_id_${user.email}` 
+    : STORAGE_ACTIVE_ID_KEY;
+
   const [activeLocationId, setActiveLocationId] = useState(() => {
-    return localStorage.getItem(STORAGE_ACTIVE_ID_KEY) || null;
+    return localStorage.getItem(userActiveKey) || localStorage.getItem(STORAGE_ACTIVE_ID_KEY) || null;
   });
+
   const [realLocations, setRealLocations] = useState(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_LOCATIONS_KEY);
+      const saved = localStorage.getItem(userStorageKey) || localStorage.getItem(STORAGE_LOCATIONS_KEY);
       if (!saved) return [];
       const parsed = JSON.parse(saved);
       // Deduplicate by city name immediately
@@ -35,23 +46,112 @@ export function WeatherProvider({ children }) {
       return [];
     }
   });
+
   const [weatherData, setWeatherData] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoadingGps, setIsLoadingGps] = useState(false);
   const [gpsError, setGpsError] = useState(null);
   const [lastRefreshedAt, setLastRefreshedAt] = useState(new Date());
 
-  // Save locations and active id whenever they change
+  // Helper: Synchronize saved locations with MongoDB Atlas
+  const syncLocationsToAtlas = (locations, activeId) => {
+    if (!user || user.isGuest || !user.email) return;
+    const cleanLocations = locations.map(l => ({
+      id: l.id,
+      name: l.name,
+      state: l.state,
+      district: l.district,
+      coords: l.coords,
+      isLive: l.isLive,
+      temp: l.current?.temp ?? l.temp,
+      condition: l.current?.condition ?? l.condition
+    }));
+
+    fetch('/api/user/preferences', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: user.email,
+        preferences: {
+          savedLocations: cleanLocations,
+          activeLocationId: activeId
+        }
+      })
+    }).catch(err => console.warn('[WeatherContext] Error syncing locations to Atlas:', err));
+  };
+
+  // Save locations and active id whenever they change (to local storage & MongoDB Atlas)
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_LOCATIONS_KEY, JSON.stringify(realLocations));
+      localStorage.setItem(userStorageKey, JSON.stringify(realLocations));
       if (activeLocationId) {
-        localStorage.setItem(STORAGE_ACTIVE_ID_KEY, activeLocationId);
+        localStorage.setItem(userActiveKey, activeLocationId);
       }
     } catch (e) {
       console.warn("Could not save locations:", e);
     }
-  }, [realLocations, activeLocationId]);
+
+    if (user && !user.isGuest && user.email && realLocations.length > 0) {
+      syncLocationsToAtlas(realLocations, activeLocationId);
+    }
+  }, [realLocations, activeLocationId, user?.email]);
+
+  // Fetch cloud saved locations from MongoDB Atlas on user login / session restore
+  useEffect(() => {
+    if (!user || user.isGuest || !user.email) return;
+
+    let isMounted = true;
+    fetch(`/api/user/preferences?email=${encodeURIComponent(user.email)}`)
+      .then(res => res.json())
+      .then(async data => {
+        if (!isMounted) return;
+        const atlasLocations = data.preferences?.savedLocations;
+        const atlasActiveId = data.preferences?.activeLocationId;
+
+        if (Array.isArray(atlasLocations) && atlasLocations.length > 0) {
+          const uniqueMap = new Map();
+          atlasLocations.forEach(loc => {
+            if (loc?.name) uniqueMap.set(loc.name.trim().toLowerCase(), loc);
+          });
+          const cleanList = Array.from(uniqueMap.values());
+          setRealLocations(cleanList);
+
+          const targetActiveId = (atlasActiveId && cleanList.some(l => l.id === atlasActiveId))
+            ? atlasActiveId
+            : cleanList[0].id;
+          setActiveLocationId(targetActiveId);
+
+          const activeTarget = cleanList.find(l => l.id === targetActiveId) || cleanList[0];
+          if (activeTarget?.coords) {
+            try {
+              setIsRefreshing(true);
+              const fresh = await fetchRealtimeWeather(
+                activeTarget.coords.lat,
+                activeTarget.coords.lon,
+                activeTarget.name,
+                activeTarget.state,
+                activeTarget.district
+              );
+              if (isMounted) {
+                setWeatherData(fresh);
+                setIsRefreshing(false);
+              }
+            } catch (e) {
+              if (isMounted) {
+                setWeatherData(activeTarget);
+                setIsRefreshing(false);
+              }
+            }
+          }
+        } else if (realLocations.length > 0) {
+          // If Atlas has no saved locations yet, seed it with the current local locations!
+          syncLocationsToAtlas(realLocations, activeLocationId);
+        }
+      })
+      .catch(err => console.warn('[WeatherContext] Could not fetch Atlas saved locations:', err));
+
+    return () => { isMounted = false; };
+  }, [user?.email]);
 
   // Initial load: fetch live GPS or fallback to real live data for default location
   useEffect(() => {

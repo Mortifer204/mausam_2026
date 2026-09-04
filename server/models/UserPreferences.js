@@ -1,4 +1,4 @@
-﻿import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 const userPreferencesSchema = new mongoose.Schema({
   userId: {
@@ -42,6 +42,14 @@ const userPreferencesSchema = new mongoose.Schema({
   savedLocationIds: {
     type: [String],
     default: ['delhi', 'punjab_farm', 'bengaluru', 'goa']
+  },
+  savedLocations: {
+    type: Array,
+    default: []
+  },
+  activeLocationId: {
+    type: String,
+    default: null
   },
   unit: {
     type: String,
