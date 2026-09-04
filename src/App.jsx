@@ -38,7 +38,7 @@ function AuthenticatedApp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060913] text-slate-100 flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+    <div className="min-h-screen bg-[#0B111E] text-slate-100 flex flex-col antialiased selection:bg-[#00E5FF] selection:text-black font-sans">
       {/* 1. Official App Header */}
       <Header 
         onOpenPersonaModal={() => setCurrentTab('profile')} 

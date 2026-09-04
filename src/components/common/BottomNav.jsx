@@ -22,9 +22,9 @@ export function BottomNav({ currentTab, setTab }) {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 pt-2">
-      <div className="max-w-md mx-auto rounded-3xl glass-nav px-3 py-2 border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-        <div className="flex items-center justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 pt-1 pointer-events-none">
+      <div className="max-w-md mx-auto rounded-full bg-[#131B2E]/95 border border-white/[0.08] px-3 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.65)] backdrop-blur-2xl pointer-events-auto">
+        <div className="flex items-center justify-between gap-1">
           {navItems.map(item => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -32,27 +32,25 @@ export function BottomNav({ currentTab, setTab }) {
               <button
                 key={item.id}
                 onClick={() => setTab(item.id)}
-                className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 group ${
+                className={`relative flex items-center justify-center transition-all duration-200 ${
                   isActive 
-                    ? 'text-sky-400 font-semibold scale-105' 
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#222F4C] text-white px-3.5 py-1.5 rounded-full border border-white/10 shadow-sm gap-1.5' 
+                    : 'text-slate-400 hover:text-slate-200 p-2 rounded-full hover:bg-white/5'
                 }`}
               >
-                <div className="relative">
-                  <Icon className={`w-5 h-5 transition-transform ${isActive ? 'scale-110' : 'group-hover:scale-105'}`} />
+                <div className="relative flex items-center justify-center">
+                  <Icon className={`w-4 h-4 transition-transform ${isActive ? 'text-accent-cyan scale-105' : 'text-slate-400'}`} />
                   {item.badge && (
-                    <span className={`absolute -top-1.5 -right-2 w-4 h-4 rounded-full ${item.badgeColor} text-[9px] font-bold text-white flex items-center justify-center animate-pulse`}>
+                    <span className={`absolute -top-1 -right-1.5 w-3.5 h-3.5 rounded-full ${item.badgeColor} text-[8px] font-bold text-white flex items-center justify-center animate-pulse`}>
                       {item.badge}
                     </span>
                   )}
                 </div>
-                <span className={`text-[10px] mt-1 tracking-tight ${isActive ? 'text-sky-400' : 'text-slate-400'}`}>
-                  {item.label}
-                </span>
 
-                {/* Subtle active pill indicator */}
                 {isActive && (
-                  <span className="absolute bottom-0 w-5 h-0.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+                  <span className="text-xs font-semibold text-white tracking-tight">
+                    {item.label === 'Home' ? 'Today' : item.label}
+                  </span>
                 )}
               </button>
             );

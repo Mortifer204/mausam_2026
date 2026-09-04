@@ -10,9 +10,9 @@
   }
   
   body {
-    background-color: #060913;
-    color: #f1f5f9;
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    background-color: #0B111E;
+    color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', 'Inter', 'Roboto', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
@@ -20,18 +20,18 @@
 
   /* Custom subtle scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
   }
 }
 
@@ -44,40 +44,63 @@
     scrollbar-width: none;
   }
 
+  /* Modular dashboard card container matching specification */
+  .mausam-card {
+    background-color: #131B2E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.75rem; /* 28px */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+  }
+
+  .mausam-card-interactive {
+    background-color: #131B2E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.75rem; /* 28px */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mausam-card-interactive:hover {
+    background-color: #19243C;
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px 0 rgba(0, 0, 0, 0.6);
+  }
+
+  /* Modular sub-card / tile container */
+  .mausam-subcard {
+    background-color: #1A233B;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.25rem; /* 20px */
+  }
+
   .glass-card {
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    background: #131B2E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
   }
 
   .glass-card-interactive {
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    background: #131B2E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .glass-card-interactive:hover {
-    background: rgba(30, 41, 59, 0.75);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: #19243C;
+    border-color: rgba(255, 255, 255, 0.16);
     transform: translateY(-2px);
-    box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 14px 36px 0 rgba(0, 0, 0, 0.6);
   }
 
   .glass-pill {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #1A233B;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .glass-nav {
-    background: rgba(9, 14, 26, 0.85);
+    background: rgba(19, 27, 46, 0.92);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 }

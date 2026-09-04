@@ -35,45 +35,39 @@ export function Header({ onOpenPersonaModal, onOpenLocationModal }) {
   const activePersonaObjs = PERSONA_CATEGORIES.filter(p => activePersonas.includes(p.id));
 
   return (
-    <header className="sticky top-0 z-30 w-full px-4 pt-3 pb-2 backdrop-blur-xl bg-[#060a16]/80 border-b border-white/10 transition-all duration-300">
+    <header className="sticky top-0 z-30 w-full px-4 pt-4 pb-2 bg-[#0B111E]/90 backdrop-blur-xl border-b border-white/[0.06] transition-all duration-300">
       <div className="max-w-md mx-auto flex items-center justify-between gap-2">
-        {/* Left: Location Selector */}
-        <div className="relative">
+        {/* Left: 4-Dot Grid Menu Icon matching UI specification */}
+        <button
+          onClick={onOpenPersonaModal}
+          className="w-10 h-10 rounded-2xl bg-[#131B2E] hover:bg-[#1A233B] border border-white/[0.08] flex items-center justify-center text-slate-300 hover:text-white transition active:scale-95 shadow-sm"
+          title="Open Customization & Personas"
+        >
+          <div className="grid grid-cols-2 gap-1 w-4 h-4 place-items-center">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-white" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-white" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-white" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-white" />
+          </div>
+        </button>
+
+        {/* Center: Location Pill Selector */}
+        <div className="relative flex-1 flex justify-center">
           <button
             onClick={() => setIsLocationDropdownOpen(prev => !prev)}
-            className="flex items-center gap-2 text-left group focus:outline-none"
+            className="flex flex-col items-center justify-center text-center group focus:outline-none px-3 py-1 rounded-2xl hover:bg-[#131B2E]/60 transition"
             title="Switch Location"
           >
-            <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition ${
-              weatherData?.isLive 
-                ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400' 
-                : 'bg-sky-500/15 border-sky-500/30 text-sky-400 group-hover:bg-sky-500/25'
-            }`}>
-              {isLoadingGps ? (
-                <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
-              ) : weatherData?.isLive ? (
-                <Navigation className="w-4 h-4 animate-pulse" />
-              ) : (
-                <MapPin className="w-4 h-4" />
-              )}
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-slate-300 fill-slate-400/20" />
+              <span className="font-bold text-sm tracking-tight text-white group-hover:text-accent-cyan transition truncate max-w-[150px]">
+                {weatherData?.name || "Locating..."}
+              </span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isLocationDropdownOpen ? 'rotate-180' : ''}`} />
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-sm tracking-tight text-white group-hover:text-sky-300 transition truncate max-w-[130px]">
-                  {weatherData?.name || "Locating..."}
-                </span>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isLocationDropdownOpen ? 'rotate-180' : ''}`} />
-              </div>
-              <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                <span className="truncate max-w-[100px]">{weatherData?.district || weatherData?.state || "India"}</span>
-                <span className="w-1 h-1 rounded-full bg-slate-500"></span>
-                <span className={`text-[10px] font-medium flex items-center gap-0.5 ${
-                  weatherData?.isLive ? 'text-emerald-400 font-bold' : 'text-sky-400'
-                }`}>
-                  <ShieldCheck className="w-2.5 h-2.5" /> {weatherData?.isLive ? 'Live Real-Time' : 'IMD Verified'}
-                </span>
-              </div>
-            </div>
+            <span className="text-[10px] text-slate-400/90 font-medium">
+              {isRefreshing ? 'Updating...' : weatherData?.isLive ? 'Live Real-Time' : weatherData?.district || 'Verified'}
+            </span>
           </button>
 
           {/* Quick Dropdown Menu */}
@@ -175,36 +169,27 @@ export function Header({ onOpenPersonaModal, onOpenLocationModal }) {
           )}
         </div>
 
-        {/* Right: Personalization Tuner & Refresh */}
-        <div className="flex items-center gap-2">
-          {/* Active Persona Badges */}
-          <button
-            onClick={onOpenPersonaModal}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-full border transition ${
-              isCustomLifestyle 
-                ? 'bg-amber-500/15 border-amber-400/40 text-amber-300 hover:border-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.2)]' 
-                : 'bg-gradient-to-r from-sky-500/15 via-indigo-500/15 to-purple-500/15 border-sky-500/30 text-sky-300 hover:border-sky-400/50'
-            }`}
-            title="Adjust Personalization Priorities"
-          >
-            <Sparkles className={`w-3 h-3 ${isCustomLifestyle ? 'text-amber-400' : 'text-sky-400'} animate-pulse`} />
-            <span className="text-[11px] font-semibold tracking-wide">
-              {isCustomLifestyle 
-                ? 'Custom' 
-                : activePersonaObjs.length === 1 
-                ? activePersonaObjs[0].title 
-                : `${activePersonaObjs.length} Interests`}
-            </span>
-          </button>
-
+        {/* Right: Quick Refresh & More Options (...) */}
+        <div className="flex items-center gap-1.5">
           {/* Refresh Button */}
           <button
             onClick={refreshWeather}
             disabled={isRefreshing}
-            className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 transition active:scale-95"
-            title="Refresh Real-Time Weather"
+            className="w-10 h-10 rounded-2xl bg-[#131B2E] hover:bg-[#1A233B] border border-white/[0.08] flex items-center justify-center text-slate-300 hover:text-white transition active:scale-95 shadow-sm"
+            title="Refresh Meteorological Feeds"
           >
-            <RotateCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-sky-400' : ''}`} />
+            <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-accent-cyan' : ''}`} />
+          </button>
+
+          {/* More Options / 3-dots Menu Button */}
+          <button
+            onClick={onOpenPersonaModal}
+            className="w-10 h-10 rounded-2xl bg-[#131B2E] hover:bg-[#1A233B] border border-white/[0.08] flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white transition active:scale-95 shadow-sm"
+            title="Configure Dashboard"
+          >
+            <span className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="w-1 h-1 rounded-full bg-slate-300" />
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flame, Clock, Droplet, Sun, Pin, ExternalLink } from 'lucide-react';
+import { Droplet, Compass, ExternalLink } from 'lucide-react';
 import { usePersonalization } from '../../context/PersonalizationContext';
 import { WidgetHeaderActions } from './WidgetHeaderActions';
 
@@ -7,92 +7,195 @@ export function FitnessRunningWidget({ weatherData, onSelect, isHero = false }) 
   const { pinnedWidgetIds } = usePersonalization();
   const isPinned = pinnedWidgetIds.includes('fitness_running');
 
-  const fitness = weatherData.specialized?.fitness || {
-    runningScore: 85,
-    status: "Good Conditions",
+  const fitness = weatherData?.specialized?.fitness || {
+    runningScore: 90,
+    status: "Prime Conditions",
     bestWindow: "6:00 AM - 7:30 AM",
-    heatIndex: 26,
-    hydrationAdvice: "Drink 250ml water prior to training."
+    hydrationAdvice: "Hydration guidance: Drink 250ml water prior to training to optimize cardio performance."
   };
 
-  const score = fitness.runningScore;
-  const isPrime = score >= 80;
-  const isSub = score < 60;
-
-  const scoreColor = isPrime ? 'text-amber-400' : isSub ? 'text-rose-400' : 'text-emerald-400';
-  const badgeBg = isPrime ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-slate-500/20 text-slate-300 border-slate-500/30';
+  const uv = weatherData?.current?.uv || 2;
+  const windSpeed = weatherData?.current?.windSpeed || 7;
 
   return (
     <div 
       onClick={() => onSelect?.('fitness_running')}
-      className={`glass-card-interactive rounded-3xl p-5 border border-white/10 cursor-pointer relative overflow-hidden group ${
-        isHero ? 'bg-gradient-to-br from-[#1c1a14]/90 to-[#121626]/95' : ''
-      }`}
+      className="mausam-card-interactive p-5 cursor-pointer relative overflow-hidden group select-none transition-all duration-300"
     >
       {/* Top Header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
-            <Flame className="w-4 h-4" />
-          </div>
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-              Outdoor Fitness & Running
-            </h4>
-            <span className="text-[10px] text-slate-400">Workout Comfort Meter</span>
-          </div>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
+            Outdoor Fitness / Running
+          </h4>
+          <span className="text-[10px] text-slate-400">Workout Comfort & Trail Safety</span>
         </div>
 
         <WidgetHeaderActions widgetId="fitness_running" />
       </div>
 
-      {/* Main Score Display */}
-      <div className="flex items-baseline justify-between my-2">
-        <div>
-          <span className={`text-4xl font-extrabold tracking-tight ${scoreColor}`}>
-            {score}
-          </span>
-          <span className="text-xs text-slate-400 ml-1 font-medium">/ 100</span>
+      {/* 1. Dual Half-Arc Gauges (Running Index & UV Index) */}
+      <div className="grid grid-cols-2 gap-2.5 mb-3">
+        {/* Left Gauge: Running Index (9/10) */}
+        <div className="mausam-subcard p-3 flex flex-col items-center justify-between text-center relative">
+          <span className="text-[11px] font-bold text-slate-300">Running Index</span>
+
+          <div className="relative w-28 h-16 my-1 flex items-center justify-center">
+            <svg viewBox="0 0 120 65" className="w-full h-full overflow-visible">
+              <defs>
+                <linearGradient id="runningArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#00B0FF" />
+                  <stop offset="100%" stopColor="#00E5FF" />
+                </linearGradient>
+              </defs>
+
+              {/* Background Arc */}
+              <path
+                d="M 15 55 A 45 45 0 0 1 105 55"
+                fill="none"
+                stroke="#1B263F"
+                strokeWidth="10"
+                strokeLinecap="round"
+              />
+
+              {/* Active Cyan Arc (90% score) */}
+              <path
+                d="M 15 55 A 45 45 0 0 1 97 25"
+                fill="none"
+                stroke="url(#runningArcGrad)"
+                strokeWidth="10"
+                strokeLinecap="round"
+                className="filter drop-shadow-[0_0_6px_rgba(0,229,255,0.6)]"
+              />
+
+              <text x="14" y="64" fill="#64748B" fontSize="8" fontWeight="bold">0</text>
+              <text x="96" y="64" fill="#64748B" fontSize="8" fontWeight="bold">100</text>
+            </svg>
+
+            {/* Readout */}
+            <div className="absolute bottom-0 text-center">
+              <span className="text-base font-black text-white">9/10</span>
+            </div>
+          </div>
         </div>
 
-        <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${badgeBg}`}>
-          {fitness.status}
-        </span>
+        {/* Right Gauge: UV / Wind Index */}
+        <div className="mausam-subcard p-3 flex flex-col items-center justify-between text-center relative">
+          <span className="text-[11px] font-bold text-slate-300">UV Index</span>
+
+          <div className="relative w-28 h-16 my-1 flex items-center justify-center">
+            <svg viewBox="0 0 120 65" className="w-full h-full overflow-visible">
+              <defs>
+                <linearGradient id="uvArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#00E676" />
+                  <stop offset="50%" stopColor="#FFD600" />
+                  <stop offset="100%" stopColor="#FF3D00" />
+                </linearGradient>
+              </defs>
+
+              {/* Background Arc */}
+              <path
+                d="M 15 55 A 45 45 0 0 1 105 55"
+                fill="none"
+                stroke="#1B263F"
+                strokeWidth="10"
+                strokeLinecap="round"
+              />
+
+              {/* Arc */}
+              <path
+                d="M 15 55 A 45 45 0 0 1 105 55"
+                fill="none"
+                stroke="url(#uvArcGrad)"
+                strokeWidth="10"
+                strokeLinecap="round"
+              />
+
+              {/* Indicator needle for UV index */}
+              <g transform="rotate(35, 60, 55)">
+                <line x1="60" y1="55" x2="60" y2="20" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="60" cy="55" r="3" fill="#FFFFFF" />
+              </g>
+
+              <text x="14" y="64" fill="#64748B" fontSize="8" fontWeight="bold">0</text>
+              <text x="96" y="64" fill="#64748B" fontSize="8" fontWeight="bold">100</text>
+            </svg>
+
+            {/* Readout */}
+            <div className="absolute bottom-0 text-center">
+              <span className="text-xs font-black text-white">{windSpeed} km/h</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Best Running Windows */}
-      <div className="my-3 p-2.5 rounded-2xl bg-white/5 border border-white/5 space-y-1.5">
-        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-          <Clock className="w-3 h-3 text-amber-400" />
-          Optimal Workout Window:
+      {/* 2. Hydration Advice Card */}
+      <div className="mausam-subcard p-3 mb-3 flex items-start gap-3 bg-[#162035]">
+        <div className="w-8 h-8 rounded-xl bg-accent-cyan/15 border border-accent-cyan/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Droplet className="w-4 h-4 text-accent-cyan fill-accent-cyan/30" />
         </div>
-        <div className="text-xs font-semibold text-white">
-          {fitness.bestWindow}
-        </div>
-      </div>
-
-      {/* Mini metric indicators */}
-      <div className="grid grid-cols-2 gap-2 my-2 text-center text-xs">
-        <div className="p-2 rounded-xl bg-white/5 border border-white/5">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold">Feels Like</span>
-          <div className="font-bold text-slate-200 mt-0.5">{weatherData.current.feelsLike}°C</div>
-        </div>
-        <div className="p-2 rounded-xl bg-white/5 border border-white/5">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold">UV Index</span>
-          <div className="font-bold text-slate-200 mt-0.5">{weatherData.current.uv} Moderate</div>
+        <div className="flex-1">
+          <div className="text-[11px] font-bold text-white">Hydration Advice</div>
+          <p className="text-xs text-slate-300 leading-relaxed font-normal mt-0.5">
+            {fitness.hydrationAdvice}
+          </p>
         </div>
       </div>
 
-      {/* Hydration Guidance */}
-      <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-slate-300 flex items-start gap-2">
-        <Droplet className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-        <span className="text-[11px] leading-relaxed text-slate-200">{fitness.hydrationAdvice}</span>
+      {/* 3. Map Trail Visual Widget */}
+      <div className="mausam-subcard p-3 relative overflow-hidden bg-[#111A2D]">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] font-bold text-slate-300">Map Trail</span>
+          <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-slate-300">
+            <Compass className="w-3.5 h-3.5" />
+          </div>
+        </div>
+
+        {/* Trail SVG Graphic Canvas */}
+        <div className="relative h-20 w-full rounded-xl bg-[#0F1626] border border-white/[0.04] overflow-hidden flex items-center justify-center">
+          {/* Subtle Topographic Contours in background */}
+          <div className="absolute inset-0 opacity-20 pointer-events-none">
+            <svg viewBox="0 0 200 80" className="w-full h-full">
+              <polygon points="120,20 150,50 110,65" fill="#1E2A47" />
+              <circle cx="40" cy="50" r="30" fill="none" stroke="#253556" strokeWidth="1" />
+              <circle cx="160" cy="30" r="40" fill="none" stroke="#253556" strokeWidth="1" />
+            </svg>
+          </div>
+
+          {/* Glowing Winding Trail Path */}
+          <svg viewBox="0 0 240 70" className="w-full h-full relative z-10 overflow-visible">
+            <defs>
+              <filter id="trailGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+
+            {/* Glowing trail */}
+            <path
+              d="M 20 58 Q 50 55, 75 35 T 130 45 T 180 25 T 225 15"
+              fill="none"
+              stroke="#00E5FF"
+              strokeWidth="3"
+              strokeLinecap="round"
+              filter="url(#trailGlow)"
+            />
+
+            {/* Waypoint Nodes */}
+            <circle cx="20" cy="58" r="4" fill="#00E676" stroke="#FFFFFF" strokeWidth="1.5" />
+            <circle cx="75" cy="35" r="3" fill="#00E5FF" stroke="#FFFFFF" strokeWidth="1" />
+            <circle cx="130" cy="45" r="3" fill="#00E5FF" stroke="#FFFFFF" strokeWidth="1" />
+            <circle cx="180" cy="25" r="3" fill="#00E5FF" stroke="#FFFFFF" strokeWidth="1" />
+            <circle cx="225" cy="15" r="4" fill="#FFD600" stroke="#FFFFFF" strokeWidth="1.5" />
+          </svg>
+        </div>
       </div>
 
-      {/* Tap prompt */}
-      <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400 group-hover:text-amber-400 transition">
-        <span>View hourly comfort curves</span>
-        <ExternalLink className="w-3 h-3" />
+      {/* Drill-down prompt */}
+      <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400 group-hover:text-accent-cyan transition">
+        <span>View pace forecasts & recommended routes</span>
+        <ExternalLink className="w-3.5 h-3.5" />
       </div>
     </div>
   );
