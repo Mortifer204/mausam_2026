@@ -93,14 +93,14 @@ export function HomeScreen({ onOpenOnboarding }) {
 
       {/* 3. TIER 1: HIGH-PRIORITY PERSONALIZED WIDGETS */}
       <div className="mb-5 space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+        <div className="flex items-center justify-between px-1 gap-2">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <Sparkles className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 truncate">
               {isCustomLifestyle ? "Customized Priority Widgets" : "Personalized Priority Widgets"}
             </h3>
           </div>
-          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border whitespace-nowrap flex-shrink-0 ${
             isCustomLifestyle 
               ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' 
               : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
@@ -169,16 +169,16 @@ export function HomeScreen({ onOpenOnboarding }) {
       {/* 5. TIER 2: ESSENTIAL WEATHER METRICS (Universal tiles with horizontal swipe) */}
       {prioritized.secondary.length > 0 && (
         <div className="mb-5 space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-1.5">
-              <LayoutGrid className="w-4 h-4 text-cyan-400" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <div className="flex items-center justify-between px-1 gap-2">
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              <LayoutGrid className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 truncate">
                 Essential Weather Conditions
               </h3>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] text-slate-500 hidden sm:inline">Universal Metrics</span>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="text-[10px] text-slate-500 hidden sm:inline whitespace-nowrap">Universal Metrics</span>
               {universalColumns.length > 2 && (
                 <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/[0.08]">
                   <button

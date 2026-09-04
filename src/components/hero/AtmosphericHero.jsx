@@ -73,7 +73,7 @@ export function AtmosphericHero() {
     .join(' + ');
 
   return (
-    <div className="relative w-full rounded-3xl p-6 bg-white/[0.04] border border-white/[0.1] shadow-glass overflow-hidden mb-5 transition-all duration-500 min-h-[300px]">
+    <div className="relative w-full rounded-3xl p-4 sm:p-6 bg-white/[0.04] border border-white/[0.1] shadow-glass overflow-hidden mb-5 transition-all duration-500 min-h-[300px]">
       {/* Dynamic 3D WebGL Moving Atmosphere Canvas (Photorealistic flowing clouds, rain streaks, and sun rays) */}
       <WeatherAtmosphereCanvas 
         conditionCode={current.conditionCode} 
@@ -91,16 +91,14 @@ export function AtmosphericHero() {
       <div className="relative z-10">
         {/* Top: Persona Indicator Pill & Live Time */}
         <div className="flex items-center justify-between gap-2 mb-3 w-full">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] backdrop-blur-md border border-white/[0.08] text-[11px] font-semibold text-cyan-300 min-w-0 flex-shrink">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] backdrop-blur-md border border-white/[0.08] text-[11px] font-semibold text-cyan-300 min-w-0 flex-1 mr-1 overflow-hidden">
             <Sparkles className="w-3 h-3 text-cyan-400 flex-shrink-0" />
-            <span className="truncate max-w-[120px] xs:max-w-[150px] sm:max-w-[190px]">
-              Tailored: {personaTitles || "General"}
-            </span>
+            <span className="truncate">{personaTitles ? `Tailored for: ${personaTitles}` : "General"}</span>
           </div>
 
           <div className="text-[11px] text-slate-300 font-medium flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
             <span className={`w-2 h-2 rounded-full flex-shrink-0 ${isRefreshing ? 'bg-amber-400 animate-ping' : 'bg-emerald-400 animate-pulse'}`} />
-            <span className="whitespace-nowrap">
+            <span className="whitespace-nowrap font-sans">
               {isRefreshing 
                 ? 'Syncing...' 
                 : lastRefreshedAt 

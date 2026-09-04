@@ -56,7 +56,7 @@ export function HourlyScrubber() {
       </div>
 
       {/* Horizontal Scrollable Scrubber */}
-      <div className="flex items-center gap-3 overflow-x-auto py-2 px-1 no-scrollbar scroll-smooth">
+      <div className="flex items-center gap-3 overflow-x-auto p-2 no-scrollbar scroll-smooth">
         {hourly.map((hour, idx) => {
           const isSelected = selectedHourIndex === idx;
           const isHighRain = hour.pop >= 60;
@@ -66,7 +66,7 @@ export function HourlyScrubber() {
               onClick={() => setSelectedHourIndex(idx)}
               className={`flex-shrink-0 w-16 py-3 px-2 rounded-2xl flex flex-col items-center justify-between gap-1.5 transition-all duration-200 text-center relative ${
                 isSelected
-                  ? 'bg-cyan-500/25 border-2 border-cyan-400 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)]'
+                  ? 'bg-cyan-500/25 border-2 border-cyan-400 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)] ring-1 ring-cyan-400/40'
                   : 'bg-white/[0.04] border border-white/[0.07] text-slate-300 hover:bg-white/[0.08]'
               }`}
             >

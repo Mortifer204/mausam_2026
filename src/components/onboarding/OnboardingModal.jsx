@@ -216,7 +216,7 @@ export function OnboardingModal({ isOpen, onClose }) {
                       <div className="text-[10px] text-slate-400">{loc.type}</div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold">{loc.current.temp}°C</span>
+                      <span className="font-semibold">{loc.current?.temp ?? loc.temp ?? "--"}°C</span>
                       {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
                     </div>
                   </button>

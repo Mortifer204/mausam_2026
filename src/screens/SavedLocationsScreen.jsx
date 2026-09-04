@@ -203,21 +203,21 @@ export function SavedLocationsScreen({ onSelectLocation }) {
                 </div>
 
                 <div className="text-right">
-                  <span className="text-2xl font-extrabold text-white">{loc.current.temp}°C</span>
-                  <div className="text-[11px] text-slate-300 font-medium">{loc.current.condition}</div>
+                  <span className="text-2xl font-extrabold text-white">{loc.current?.temp ?? loc.temp ?? "--"}°C</span>
+                  <div className="text-[11px] text-slate-300 font-medium">{loc.current?.condition ?? loc.condition ?? "Clear"}</div>
                 </div>
               </div>
 
               {/* Sub metrics */}
               <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-[11px]">
                 <div className="flex items-center gap-2">
-                  <span className={`font-bold ${loc.current.aqi > 150 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                    AQI {loc.current.aqi}
+                  <span className={`font-bold ${(loc.current?.aqi || 50) > 150 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                    AQI {loc.current?.aqi ?? 45}
                   </span>
                   <span className="text-slate-500">•</span>
-                  <span className="text-slate-300">Humidity {loc.current.humidity}%</span>
+                  <span className="text-slate-300">Humidity {loc.current?.humidity ?? 60}%</span>
                   <span className="text-slate-500">•</span>
-                  <span className="text-slate-300">Wind {loc.current.windSpeed} km/h</span>
+                  <span className="text-slate-300">Wind {loc.current?.windSpeed ?? 10} km/h</span>
                 </div>
 
                 <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
