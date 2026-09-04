@@ -302,55 +302,62 @@ export function WeatherProvider({ children }) {
    * Fetches Real-Time GPS Location from user's device browser
    */
   const fetchCurrentGpsLocation = async () => {
-    if (!navigator.geolocation) {
-      setGpsError("Geolocation is not supported by your device browser.");
-      return;
-    }
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) {
+        setGpsError("Geolocation is not supported by your device browser.");
+        return resolve(null);
+      }
 
-    setIsLoadingGps(true);
-    setGpsError(null);
+      setIsLoadingGps(true);
+      setGpsError(null);
 
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        try {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-          const geo = await reverseGeocodeCoords(lat, lon);
-          const liveData = await fetchRealtimeWeather(lat, lon, geo.name, geo.state, geo.district);
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const geo = await reverseGeocodeCoords(lat, lon);
+            const liveData = await fetchRealtimeWeather(lat, lon, geo.name, geo.state, geo.district);
+            liveData.isLive = true;
 
-          addOrUpdateLocation(liveData);
-          setIsLoadingGps(false);
-        } catch (err) {
-          console.error("GPS weather fetch failed:", err);
-          setGpsError("Could not retrieve live weather for your location. Please check your internet connection.");
-          setIsLoadingGps(false);
-        }
-      },
-      async (err) => {
-        console.warn("Geolocation error, attempting IP fallback:", err);
-
-        // Auto-fallback to Network IP location (works over HTTP on mobile!)
-        try {
-          const ipLoc = await fetchIpLocationFallback();
-          if (ipLoc) {
-            const liveData = await fetchRealtimeWeather(ipLoc.lat, ipLoc.lon, ipLoc.name, ipLoc.state, ipLoc.district);
             addOrUpdateLocation(liveData);
             setIsLoadingGps(false);
-            setGpsError(null);
-            return;
+            resolve(liveData);
+          } catch (err) {
+            console.error("GPS weather fetch failed:", err);
+            setGpsError("Could not retrieve live weather for your location. Please check your internet connection.");
+            setIsLoadingGps(false);
+            resolve(null);
           }
-        } catch (ipErr) {
-          console.warn("IP Geolocation fallback failed:", ipErr);
-        }
+        },
+        async (err) => {
+          console.warn("Geolocation error, attempting IP fallback:", err);
 
-        let msg = "Location permission blocked. Search any Indian city below or allow location in your browser.";
-        if (err.code === err.POSITION_UNAVAILABLE) msg = "Location information is unavailable.";
-        if (err.code === err.TIMEOUT) msg = "Location request timed out.";
-        setGpsError(msg);
-        setIsLoadingGps(false);
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+          // Auto-fallback to Network IP location (works over HTTP on mobile!)
+          try {
+            const ipLoc = await fetchIpLocationFallback();
+            if (ipLoc) {
+              const liveData = await fetchRealtimeWeather(ipLoc.lat, ipLoc.lon, ipLoc.name, ipLoc.state, ipLoc.district);
+              liveData.isLive = true;
+              addOrUpdateLocation(liveData);
+              setIsLoadingGps(false);
+              setGpsError(null);
+              return resolve(liveData);
+            }
+          } catch (ipErr) {
+            console.warn("IP Geolocation fallback failed:", ipErr);
+          }
+
+          let msg = "Location permission blocked. Search your city or allow location in your browser.";
+          if (err.code === err.POSITION_UNAVAILABLE) msg = "Location information is unavailable.";
+          if (err.code === err.TIMEOUT) msg = "Location request timed out.";
+          setGpsError(msg);
+          setIsLoadingGps(false);
+          resolve(null);
+        },
+        { timeout: 10000, enableHighAccuracy: true }
+      );
+    });
   };
 
   /**

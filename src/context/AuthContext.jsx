@@ -65,7 +65,8 @@ export function AuthProvider({ children }) {
       }
 
       setUser(data.user);
-      setShouldOpenOnboarding(true);
+      const isAlreadyOnboarded = data.preferences?.hasCompletedOnboarding === true;
+      setShouldOpenOnboarding(!isAlreadyOnboarded);
       if (data.preferences) {
         if (data.user?.email) {
           try {
