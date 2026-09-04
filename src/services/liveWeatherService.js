@@ -5,7 +5,7 @@ const WMO_CODE_MAP = {
   0: { condition: "Clear Sky", code: "clear", icon: "Sun" },
   1: { condition: "Mainly Clear", code: "clear", icon: "Sun" },
   2: { condition: "Partly Cloudy", code: "pleasant", icon: "CloudSun" },
-  3: { condition: "Overcast", code: "pleasant", icon: "Cloud" },
+  3: { condition: "Overcast", code: "overcast", icon: "CloudSun" },
   45: { condition: "Fog & Haze", code: "pleasant", icon: "Cloud" },
   48: { condition: "Depositing Rime Fog", code: "pleasant", icon: "Cloud" },
   51: { condition: "Light Drizzle", code: "rain", icon: "CloudRain" },

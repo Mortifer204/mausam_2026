@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { PersonalizationProvider, usePersonalization } from './context/PersonalizationContext';
 import { WeatherProvider, useWeather } from './context/WeatherContext';
@@ -12,18 +12,32 @@ import { ExploreScreen } from './screens/ExploreScreen';
 import { SavedLocationsScreen } from './screens/SavedLocationsScreen';
 import { AlertsScreen } from './screens/AlertsScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
+import { LifestyleInterestsModal } from './components/common/LifestyleInterestsModal';
+import { getThemeForCondition } from './utils/weatherThemes';
 import { Loader2 } from 'lucide-react';
 
 function AuthenticatedApp() {
   const [currentTab, setCurrentTab] = useState('home');
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
-  const { hasCompletedOnboarding } = usePersonalization();
+  const [isLifestyleModalOpen, setIsLifestyleModalOpen] = useState(false);
+  const { hasCompletedOnboarding, isOnboardingModalOpen, setIsOnboardingModalOpen } = usePersonalization();
+  const { shouldOpenOnboarding, setShouldOpenOnboarding } = useAuth();
   const { weatherData } = useWeather();
+
+  const currentConditionCode = weatherData?.current?.conditionCode || 'pleasant';
+  const weatherTheme = getThemeForCondition(currentConditionCode);
+
+  useEffect(() => {
+    if (weatherTheme?.bgGradient) {
+      document.body.style.background = weatherTheme.bgGradient;
+      document.body.style.backgroundAttachment = 'fixed';
+    }
+  }, [weatherTheme]);
 
   const renderActiveScreen = () => {
     switch (currentTab) {
       case 'home':
-        return <HomeScreen />;
+        return <HomeScreen onOpenOnboarding={() => setIsOnboardingOpen(true)} />;
       case 'explore':
         return <ExploreScreen />;
       case 'saved':
@@ -31,17 +45,24 @@ function AuthenticatedApp() {
       case 'alerts':
         return <AlertsScreen />;
       case 'profile':
-        return <ProfileScreen onOpenOnboarding={() => setIsOnboardingOpen(true)} />;
+        return <ProfileScreen />;
       default:
-        return <HomeScreen />;
+        return <HomeScreen onOpenOnboarding={() => setIsOnboardingOpen(true)} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0B111E] text-slate-100 flex flex-col antialiased selection:bg-[#00E5FF] selection:text-black font-sans">
+    <div 
+      className="min-h-screen text-[#F1F5F9] flex flex-col antialiased selection:bg-cyan-500/30 selection:text-white font-sans transition-all duration-700"
+      style={{
+        background: weatherTheme.bgGradient,
+        backgroundAttachment: 'fixed',
+        minHeight: '100vh',
+      }}
+    >
       {/* 1. Official App Header */}
       <Header 
-        onOpenPersonaModal={() => setCurrentTab('profile')} 
+        onOpenPersonaModal={() => setIsLifestyleModalOpen(true)} 
         onOpenLocationModal={() => setCurrentTab('saved')} 
       />
 
@@ -49,7 +70,7 @@ function AuthenticatedApp() {
       <main className="flex-1 w-full flex flex-col justify-start">
         {!weatherData ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3 min-h-[60vh]">
-            <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
             <div className="text-sm font-bold text-white">Fetching Live Meteorological Feeds...</div>
             <p className="text-xs text-slate-400 max-w-xs">
               Detecting real-time temperature, satellite observations, and local air quality...
@@ -65,8 +86,18 @@ function AuthenticatedApp() {
 
       {/* 4. Progressive Onboarding Modal */}
       <OnboardingModal
-        isOpen={isOnboardingOpen || !hasCompletedOnboarding}
-        onClose={() => setIsOnboardingOpen(false)}
+        isOpen={isOnboardingOpen || shouldOpenOnboarding || !hasCompletedOnboarding || isOnboardingModalOpen}
+        onClose={() => {
+          setIsOnboardingOpen(false);
+          setShouldOpenOnboarding(false);
+          setIsOnboardingModalOpen?.(false);
+        }}
+      />
+
+      {/* 5. Lifestyle Interests Modal on top of Home Screen */}
+      <LifestyleInterestsModal
+        isOpen={isLifestyleModalOpen}
+        onClose={() => setIsLifestyleModalOpen(false)}
       />
     </div>
   );

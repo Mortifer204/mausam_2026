@@ -254,9 +254,9 @@ export function getPrioritizedWidgets(activePersonas = [], weatherData = {}, pin
     heroPriority.push(universalMetrics.shift());
   }
 
-  // 4. Assemble Secondary Metrics Grid:
-  // Take up to 4 top-scoring universal metric tiles (2x2 grid)
-  const secondary = universalMetrics.slice(0, 4);
+  // 4. Assemble Secondary Metrics:
+  // Return all eligible universal metric tiles for horizontal swipe
+  const secondary = [...universalMetrics];
 
   return {
     heroPriority,

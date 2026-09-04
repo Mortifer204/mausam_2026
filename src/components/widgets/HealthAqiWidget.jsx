@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Wind, Gauge, ExternalLink } from 'lucide-react';
+import { HeartPulse, TrendingUp, ExternalLink, Smile, Meh, Frown } from 'lucide-react';
 import { usePersonalization } from '../../context/PersonalizationContext';
 import { WidgetHeaderActions } from './WidgetHeaderActions';
 
@@ -8,229 +8,294 @@ export function HealthAqiWidget({ weatherData, onSelect, isHero = false }) {
   const isPinned = pinnedWidgetIds.includes('health_aqi');
 
   const health = weatherData?.specialized?.health || {
-    aqi: weatherData?.current?.aqi || 42,
+    aqi: weatherData?.current?.aqi || 27,
     category: weatherData?.current?.aqiStatus || "Good",
-    pm25Value: weatherData?.current?.pm25 || 35,
-    pm10Value: weatherData?.current?.pm10 || 50,
-    ozoneValue: 22,
-    pollenLevel: "Low",
-    uvIndex: weatherData?.current?.uv || 3,
-    actionGuideline: "Air quality is ideal for outdoor activities."
+    actionGuideline: "Air quality is favorable for outdoor activities."
   };
 
-  const aqi = health.aqi || 42;
-  const ozone = health.ozoneValue || 22;
-  const pm25 = health.pm25Value || 35;
-  const pm10 = health.pm10Value || 50;
+  const aqi = weatherData?.current?.aqi ?? health.aqi ?? 27;
+  const category = weatherData?.current?.aqiStatus || health.category || (aqi <= 50 ? "Good" : aqi <= 100 ? "Satisfactory" : aqi <= 200 ? "Moderate" : "Poor");
+  const guideline = health.actionGuideline || "Air quality is favorable for outdoor activities.";
 
-  // Normalized gauge angle (0 to 180 degrees) based on AQI up to 300
-  const normalizedAqi = Math.min(300, Math.max(0, aqi));
-  const needleAngle = (normalizedAqi / 300) * 180; // 0 (left) to 180 (right)
+  // Status color logic based on AQI (official tiers)
+  const isGood = aqi <= 50;
+  const isSatisfactory = aqi > 50 && aqi <= 100;
+  const isGoodOrSatisfactory = aqi <= 100;
+  const isModerate = aqi > 100 && aqi <= 200;
+  const isPoor = aqi > 200 && aqi <= 300;
+  const isVeryPoorOrSevere = aqi > 300;
+  
+  // Dynamic arc bar color & gradient
+  const arcColors = isGood
+    ? { start: '#34D399', end: '#10B981', glow: 'rgba(16,185,129,0.4)' }
+    : isSatisfactory
+    ? { start: '#2DD4BF', end: '#059669', glow: 'rgba(5,150,105,0.4)' }
+    : isModerate
+    ? { start: '#FBBF24', end: '#F59E0B', glow: 'rgba(245,158,11,0.4)' }
+    : isPoor
+    ? { start: '#FB923C', end: '#EA580C', glow: 'rgba(234,88,12,0.4)' }
+    : { start: '#F87171', end: '#E11D48', glow: 'rgba(225,29,72,0.4)' };
 
-  // Determine status color
-  const statusColor = aqi <= 50 ? '#00E676' : aqi <= 100 ? '#FFD600' : aqi <= 200 ? '#FF6D00' : '#FF3D00';
-  const statusLabel = aqi <= 50 ? 'Good' : aqi <= 100 ? 'Moderate' : aqi <= 200 ? 'Poor' : 'Hazardous';
+  const strokeColor = arcColors.end;
 
-  // SVG Gauge calculations
-  const radius = 70;
-  const strokeWidth = 14;
-  const cx = 95;
-  const cy = 85;
+  // Arc Gauge Geometry (Semi-circle from 180° to 360°)
+  // Center: (75, 78), Radius: 62. Perimeter of semi-circle = Math.PI * 62 = 194.78
+  const arcLength = 194.78;
+  const progressRatio = Math.min(1, Math.max(0, aqi / 500));
+  const strokeDashoffset = arcLength * (1 - progressRatio);
 
   return (
     <div 
       onClick={() => onSelect?.('health_aqi')}
-      className="mausam-card-interactive p-5 cursor-pointer relative overflow-hidden group select-none transition-all duration-300"
+      className="mausam-card-interactive p-4 sm:p-5 cursor-pointer relative overflow-hidden group select-none transition-all duration-300"
     >
-      {/* Top Header */}
+      {/* 1. Top Header */}
       <div className="flex items-center justify-between mb-4">
-        <div>
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-green animate-pulse" />
-            AQI Deep Dive
-          </h4>
-          <span className="text-[10px] text-slate-400">National Air Quality Gauge</span>
+        <div className="flex items-center gap-3">
+          {/* Beveled glowing square badge matching reference */}
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400/25 to-emerald-700/20 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25)] flex items-center justify-center text-emerald-300 flex-shrink-0">
+            <HeartPulse className="w-5 h-5 stroke-[2.2]" />
+          </div>
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+              Air Quality & Respiratory
+            </h4>
+            <span className="text-[10px] text-slate-400">National AQI Index</span>
+          </div>
         </div>
 
         <WidgetHeaderActions widgetId="health_aqi" />
       </div>
 
-      {/* 1. Semicircle Rainbow Radial Gauge (Matching UI Specification) */}
-      <div className="mausam-subcard p-4 flex flex-col items-center justify-center relative mb-3">
-        <div className="relative w-48 h-28 flex items-center justify-center">
-          <svg viewBox="0 0 190 100" className="w-full h-full overflow-visible">
+      {/* 2. Middle Row: Arc Gauge + Status Card */}
+      <div className="flex items-center gap-2.5 sm:gap-3.5 mb-3">
+        {/* Left: Horseshoe Arc Gauge (Compact & aligned) */}
+        <div className="w-[82px] sm:w-[98px] flex-shrink-0 flex items-center justify-center py-0.5">
+          <svg className="w-full h-auto select-none overflow-visible" viewBox="0 0 200 150">
             <defs>
-              <linearGradient id="aqiRainbow" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#00E676" />
-                <stop offset="35%" stopColor="#FFD600" />
-                <stop offset="70%" stopColor="#FF6D00" />
-                <stop offset="100%" stopColor="#FF3D00" />
+              <linearGradient id="aqiHorseshoeGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor={arcColors.start} />
+                <stop offset="100%" stopColor={arcColors.end} />
               </linearGradient>
-              <filter id="gaugeGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
             </defs>
 
-            {/* Background Track */}
+            {/* Background Visible Arc Track (224° extended horseshoe curvature) */}
             <path
-              d="M 25 85 A 70 70 0 0 1 165 85"
+              d="M 31.4 117.7 A 74 74 0 1 1 168.6 117.7"
               fill="none"
-              stroke="#1F2B48"
-              strokeWidth={strokeWidth}
+              stroke="rgba(255, 255, 255, 0.16)"
+              strokeWidth="11"
               strokeLinecap="round"
             />
 
-            {/* Rainbow Arc */}
+            {/* Animated Active Progress Arc */}
             <path
-              d="M 25 85 A 70 70 0 0 1 165 85"
+              d="M 31.4 117.7 A 74 74 0 1 1 168.6 117.7"
               fill="none"
-              stroke="url(#aqiRainbow)"
-              strokeWidth={strokeWidth}
+              stroke="url(#aqiHorseshoeGrad)"
+              strokeWidth="11.5"
               strokeLinecap="round"
-              filter="url(#gaugeGlow)"
+              strokeDasharray={289.4}
+              strokeDashoffset={289.4 * (1 - Math.min(1, Math.max(0, aqi / 500)))}
+              className="transition-all duration-1000 ease-out"
             />
 
-            {/* Needle Pivot & Arm */}
-            <g transform={`rotate(${needleAngle - 90}, ${cx}, ${cy})`}>
-              <line 
-                x1={cx} 
-                y1={cy} 
-                x2={cx} 
-                y2={cy - 52} 
-                stroke="#FFFFFF" 
-                strokeWidth="2.5" 
-                strokeLinecap="round" 
-              />
-              <circle cx={cx} cy={cy} r="4.5" fill="#FFFFFF" />
-            </g>
-
-            {/* Scale Min / Max markers */}
-            <text x="22" y="96" fill="#64748B" fontSize="9" fontWeight="600">0</text>
-            <text x="156" y="96" fill="#64748B" fontSize="9" fontWeight="600">300+</text>
-          </svg>
-
-          {/* Central AQI Readout */}
-          <div className="absolute bottom-1 flex flex-col items-center">
-            <span className="text-xl font-black text-white tracking-tight leading-none">AQI</span>
-            <span 
-              className="text-xs font-bold mt-0.5 tracking-wide uppercase"
-              style={{ color: statusColor }}
+            {/* Centered Large Bold Numeral filling dome, lowered */}
+            <text
+              x="100"
+              y="88"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill={strokeColor}
+              fontSize="52"
+              fontWeight="900"
+              letterSpacing="-0.03em"
+              className="font-sans"
+              style={{ filter: `drop-shadow(0 0 14px ${isGoodOrSatisfactory ? 'rgba(16,185,129,0.45)' : isModerate ? 'rgba(245,158,11,0.45)' : 'rgba(244,63,94,0.45)'})` }}
             >
-              {statusLabel}
-            </span>
-          </div>
-        </div>
+              {aqi}
+            </text>
 
-        {/* Mini pagination indicator dots */}
-        <div className="flex items-center gap-1 mt-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan" />
-          <span className="w-1 h-1 rounded-full bg-slate-600" />
-        </div>
-      </div>
+            {/* AQI text nestled lowered below the number */}
+            <text
+              x="100"
+              y="120"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="#F1F5F9"
+              fontSize="15"
+              fontWeight="800"
+              letterSpacing="0.06em"
+              className="font-sans"
+            >
+              AQI
+            </text>
 
-      {/* 2. Three Modular Pollutant Metrics (PM2.5, PM10, Ozone) */}
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        {/* PM2.5 */}
-        <div className="mausam-subcard p-2.5 flex flex-col items-center text-center">
-          <Activity className="w-4 h-4 text-accent-cyan mb-1" />
-          <span className="text-[10px] text-slate-400 font-medium">PM2.5</span>
-          <span className="text-base font-extrabold text-white mt-0.5">{pm25}</span>
-          <span className="text-[8px] text-slate-500">µg/m³</span>
-        </div>
-
-        {/* PM10 */}
-        <div className="mausam-subcard p-2.5 flex flex-col items-center text-center">
-          <Wind className="w-4 h-4 text-accent-yellow mb-1" />
-          <span className="text-[10px] text-slate-400 font-medium">PM10</span>
-          <span className="text-base font-extrabold text-white mt-0.5">{pm10}</span>
-          <span className="text-[8px] text-slate-500">µg/m³</span>
-        </div>
-
-        {/* Ozone */}
-        <div className="mausam-subcard p-2.5 flex flex-col items-center text-center">
-          <Gauge className="w-4 h-4 text-accent-green mb-1" />
-          <span className="text-[10px] text-slate-400 font-medium">Ozone</span>
-          <span className="text-base font-extrabold text-white mt-0.5">{ozone}</span>
-          <span className="text-[8px] text-slate-500">ppb</span>
-        </div>
-      </div>
-
-      {/* 3. 24H Historical AQI Smooth Curved Wave Graph */}
-      <div className="mausam-subcard p-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] font-bold text-slate-300">24H Historical AQI</span>
-          <span className="text-[9px] font-semibold text-accent-green px-1.5 py-0.5 rounded bg-accent-green/10 border border-accent-green/20">
-            Realtime
-          </span>
-        </div>
-
-        <div className="relative h-20 w-full">
-          <svg viewBox="0 0 280 80" className="w-full h-full overflow-visible">
-            <defs>
-              <linearGradient id="aqiHistoryGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#FF6D00" stopOpacity="0.45" />
-                <stop offset="60%" stopColor="#00E676" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#00E676" stopOpacity="0" />
-              </linearGradient>
-              <linearGradient id="aqiStrokeGradient" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#00E676" />
-                <stop offset="60%" stopColor="#FF6D00" />
-                <stop offset="100%" stopColor="#00E5FF" />
-              </linearGradient>
-            </defs>
-
-            {/* Subtle Horizontal Grid lines */}
-            <line x1="25" y1="15" x2="275" y2="15" stroke="#1F2B48" strokeDasharray="3 3" strokeWidth="0.75" />
-            <line x1="25" y1="40" x2="275" y2="40" stroke="#1F2B48" strokeDasharray="3 3" strokeWidth="0.75" />
-            <line x1="25" y1="65" x2="275" y2="65" stroke="#1F2B48" strokeDasharray="3 3" strokeWidth="0.75" />
-
-            {/* Y Axis Numbers */}
-            <text x="5" y="18" fill="#475569" fontSize="7" fontWeight="bold">200</text>
-            <text x="5" y="43" fill="#475569" fontSize="7" fontWeight="bold">100</text>
-            <text x="12" y="68" fill="#475569" fontSize="7" fontWeight="bold">0</text>
-
-            {/* Smooth Curved Area Under Curve */}
-            <path
-              d="M 25 65 Q 60 62, 90 55 T 150 48 T 190 22 T 225 45 T 275 60 L 275 75 L 25 75 Z"
-              fill="url(#aqiHistoryGradient)"
-            />
-
-            {/* Smooth Glowing Path Line */}
-            <path
-              d="M 25 65 Q 60 62, 90 55 T 150 48 T 190 22 T 225 45 T 275 60"
-              fill="none"
-              stroke="url(#aqiStrokeGradient)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-
-            {/* Peak Tag Marker */}
-            <g transform="translate(190, 22)">
-              <circle cx="0" cy="0" r="3.5" fill="#FFFFFF" stroke="#FF6D00" strokeWidth="2" />
-              <rect x="-14" y="-18" width="28" height="12" rx="4" fill="#FF6D00" />
-              <text x="0" y="-9.5" fill="#FFFFFF" fontSize="7" fontWeight="bold" textAnchor="middle">
-                AQI
-              </text>
-            </g>
+            {/* 0 and 500 Min/Max Markers directly aligned beneath terminals */}
+            <text
+              x="31.4"
+              y="138"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="#94A3B8"
+              fontSize="13"
+              fontWeight="600"
+              className="font-sans"
+            >
+              0
+            </text>
+            <text
+              x="168.6"
+              y="138"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="#94A3B8"
+              fontSize="13"
+              fontWeight="600"
+              className="font-sans"
+            >
+              500
+            </text>
           </svg>
+        </div>
 
-          {/* Time markers */}
-          <div className="flex justify-between px-6 text-[8px] text-slate-500 font-medium mt-1">
-            <span>4 hrs</span>
-            <span>8 hrs</span>
-            <span>12 hrs</span>
-            <span>16 hrs</span>
-            <span>20 hrs</span>
-            <span>24 hrs</span>
+        {/* Right: Status Pill Card with Green Smiley & Description (Spacious flex layout with ample right padding) */}
+        <div className={`flex-1 min-w-0 rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 relative overflow-hidden flex flex-col justify-center border ${
+          isGoodOrSatisfactory 
+            ? 'bg-gradient-to-br from-emerald-950/45 via-emerald-900/20 to-teal-950/30 border-emerald-500/25 shadow-[inset_0_1px_1px_rgba(16,185,129,0.15)]'
+            : isModerate 
+            ? 'bg-gradient-to-br from-amber-950/45 via-amber-900/20 to-yellow-950/30 border-amber-500/25 shadow-[inset_0_1px_1px_rgba(245,158,11,0.15)]'
+            : 'bg-gradient-to-br from-rose-950/45 via-rose-900/20 to-orange-950/30 border-rose-500/25 shadow-[inset_0_1px_1px_rgba(244,63,94,0.15)]'
+        }`}>
+          {/* Dynamic Decorative Vector Illustration based on AQI level */}
+          {isGoodOrSatisfactory ? (
+            /* Good/Satisfactory: Lush Grass Blades & Leaves */
+            <svg className="absolute bottom-0 right-0 w-24 h-20 pointer-events-none opacity-25 text-emerald-400" viewBox="0 0 100 80" fill="currentColor">
+              <path d="M70 80 C 60 50, 75 25, 95 15 C 85 35, 90 55, 70 80 Z" />
+              <path d="M50 80 C 45 60, 55 42, 70 32 C 60 48, 62 62, 50 80 Z" />
+              <path d="M85 80 C 82 62, 90 48, 100 40 C 95 55, 96 68, 85 80 Z" />
+              <path d="M30 80 Q 60 72 100 75 L 100 80 Z" opacity="0.6" />
+            </svg>
+          ) : isModerate ? (
+            /* Moderate: Urban City Skyline with gentle haze / building silhouettes */
+            <svg className="absolute bottom-0 right-0 w-28 h-20 pointer-events-none opacity-25 text-amber-400" viewBox="0 0 120 80" fill="currentColor">
+              {/* Building silhouettes */}
+              <rect x="25" y="48" width="16" height="32" rx="1.5" />
+              <rect x="44" y="32" width="20" height="48" rx="2" />
+              <rect x="67" y="22" width="18" height="58" rx="2" />
+              <rect x="88" y="38" width="22" height="42" rx="2" />
+              {/* Spire on tallest building */}
+              <line x1="76" y1="12" x2="76" y2="22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              {/* Tiny building windows */}
+              <circle cx="50" cy="40" r="1.5" fill="#000" opacity="0.4" />
+              <circle cx="58" cy="40" r="1.5" fill="#000" opacity="0.4" />
+              <circle cx="50" cy="50" r="1.5" fill="#000" opacity="0.4" />
+              <circle cx="58" cy="50" r="1.5" fill="#000" opacity="0.4" />
+              <circle cx="73" cy="30" r="1.5" fill="#000" opacity="0.4" />
+              <circle cx="79" cy="30" r="1.5" fill="#000" opacity="0.4" />
+              <circle cx="73" cy="40" r="1.5" fill="#000" opacity="0.4" />
+              <circle cx="79" cy="40" r="1.5" fill="#000" opacity="0.4" />
+              {/* Soft ground line */}
+              <path d="M15 80 Q 60 74 120 76 L 120 80 Z" opacity="0.8" />
+            </svg>
+          ) : (
+            /* Poor / Severe / Unhealthy: Industrial Chimneys / Factory Smokestacks with Smog Plumes */
+            <svg className="absolute bottom-0 right-0 w-28 h-22 pointer-events-none opacity-25 text-rose-400" viewBox="0 0 120 85" fill="currentColor">
+              {/* Industrial plant silhouettes */}
+              <rect x="30" y="52" width="28" height="33" rx="1.5" />
+              {/* Chimney 1 */}
+              <path d="M62 85 L65 38 L75 38 L78 85 Z" />
+              {/* Chimney 2 (taller) */}
+              <path d="M82 85 L85 26 L96 26 L99 85 Z" />
+              {/* Smoke / Smog clouds billowing out */}
+              <path d="M66 32 C60 26, 62 18, 70 18 C74 12, 84 14, 86 20 C92 18, 98 22, 95 28 C90 32, 75 34, 66 32 Z" opacity="0.7" />
+              <path d="M84 20 C82 12, 90 6, 98 8 C105 4, 114 9, 112 16 C118 18, 116 26, 108 26 Z" opacity="0.5" />
+              {/* Ground level */}
+              <path d="M20 85 Q 60 81 120 82 L 120 85 Z" opacity="0.8" />
+            </svg>
+          )}
+
+          <div className="relative z-10 flex items-start gap-2.5 sm:gap-3">
+            {/* Green Glowing Smile Icon Badge */}
+            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+              isGoodOrSatisfactory 
+                ? 'bg-emerald-400/20 border border-emerald-400/35 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
+                : isModerate 
+                ? 'bg-amber-400/20 border border-amber-400/35 text-amber-400' 
+                : 'bg-rose-400/20 border border-rose-400/35 text-rose-400'
+            }`}>
+              {isGoodOrSatisfactory ? (
+                <Smile className="w-5 h-5 stroke-[2.3]" />
+              ) : isModerate ? (
+                <Meh className="w-5 h-5 stroke-[2.3]" />
+              ) : (
+                <Frown className="w-5 h-5 stroke-[2.3]" />
+              )}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <h3 className="text-[15px] sm:text-lg font-bold text-white tracking-tight truncate leading-tight">
+                {category}
+              </h3>
+              <p className="text-[11px] sm:text-xs text-slate-300 font-medium leading-snug sm:leading-relaxed mt-1 line-clamp-3">
+                {aqi <= 50 
+                  ? "Air quality is satisfactory and poses little or no risk."
+                  : aqi <= 100 
+                  ? "Air quality is acceptable and poses little or no risk."
+                  : aqi <= 200 
+                  ? "Moderate air quality; sensitive people should take care."
+                  : "Poor air quality; minimize strenuous outdoor cardio."}
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Drill-down prompt */}
-      <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400 group-hover:text-accent-green transition">
-        <span>Tap to inspect health advisory & trends</span>
-        <ExternalLink className="w-3.5 h-3.5" />
+      {/* 3. Advisory Pill Banner with Landscape Graphic (Sleek layout without shield icon) */}
+      <div className="py-2.5 px-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.07] flex items-center justify-between relative overflow-hidden mb-3">
+        <div className="flex-1 min-w-0 pr-3">
+          <p className="text-xs text-slate-200 font-medium leading-relaxed">
+            {guideline}
+          </p>
+        </div>
+
+        {/* Outdoor Landscape Artwork on the Right */}
+        <svg className="w-28 h-12 flex-shrink-0 pointer-events-none" viewBox="0 0 120 50" fill="none">
+          {/* Glowing Sun with Rays */}
+          <circle cx="95" cy="18" r="6" fill="#FACC15" />
+          <line x1="95" y1="8" x2="95" y2="11" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="95" y1="25" x2="95" y2="28" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="85" y1="18" x2="88" y2="18" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="102" y1="18" x2="105" y2="18" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="88" y1="11" x2="90" y2="13" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="100" y1="23" x2="102" y2="25" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="88" y1="25" x2="90" y2="23" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="100" y1="13" x2="102" y2="11" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" />
+
+          {/* Stylized Clouds */}
+          <path d="M62 18 Q65 14 70 14 Q73 11 78 13 Q82 13 83 18 Z" fill="#334155" opacity="0.6" />
+          <path d="M98 38 Q100 35 104 35 Q107 33 111 34 Q114 34 115 38 Z" fill="#334155" opacity="0.4" />
+
+          {/* Rolling Hills */}
+          <path d="M25 50 Q65 26 120 40 L120 50 Z" fill="#064e3b" />
+          <path d="M40 50 Q75 32 120 36 L120 50 Z" fill="#047857" opacity="0.85" />
+          <path d="M60 50 Q90 38 120 42 L120 50 Z" fill="#10B981" opacity="0.35" />
+
+          {/* Trees */}
+          <rect x="48" y="34" width="2" height="12" fill="#1e293b" />
+          <circle cx="49" cy="32" r="6" fill="#059669" />
+          <rect x="63" y="36" width="2" height="10" fill="#1e293b" />
+          <circle cx="64" cy="34" r="5" fill="#10B981" />
+        </svg>
+      </div>
+
+      {/* 4. Footer Link */}
+      <div className="flex items-center justify-between text-xs text-emerald-400 font-semibold group-hover:text-emerald-300 transition">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-emerald-400" />
+          <span>Tap to inspect 24h pollutant curve</span>
+        </div>
+        <ExternalLink className="w-4 h-4 text-emerald-400" />
       </div>
     </div>
   );

@@ -4,42 +4,56 @@
 export const WEATHER_THEMES = {
   clear: {
     name: "Clear / Sunny",
-    gradient: "from-sky-900/90 via-[#0c2340]/95 to-[#060e1a]",
+    gradient: "from-[#1A3F75] via-[#14325C] to-[#0D1F38]",
+    bgGradient: "linear-gradient(180deg, #1A3F75 0%, #14325C 50%, #0D1F38 100%)",
     accentGlow: "rgba(56, 189, 248, 0.25)",
     skyTone: "text-amber-300",
     badge: "bg-amber-500/20 text-amber-300 border-amber-500/40",
   },
   sunny: {
     name: "Bright Sun",
-    gradient: "from-amber-950/70 via-[#0b1f3a]/95 to-[#050b14]",
+    gradient: "from-[#1F4785] via-[#173868] to-[#102444]",
+    bgGradient: "linear-gradient(180deg, #1F4785 0%, #173868 50%, #102444 100%)",
     accentGlow: "rgba(251, 191, 36, 0.25)",
     skyTone: "text-amber-400",
     badge: "bg-amber-500/20 text-amber-300 border-amber-500/40",
   },
   pleasant: {
     name: "Pleasant & Breezy",
-    gradient: "from-emerald-950/70 via-[#0a2238]/95 to-[#050e18]",
+    gradient: "from-[#162E48] via-[#10243B] to-[#0A1828]",
+    bgGradient: "linear-gradient(180deg, #162E48 0%, #10243B 50%, #0A1828 100%)",
     accentGlow: "rgba(52, 211, 153, 0.25)",
     skyTone: "text-emerald-300",
     badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
   },
+  overcast: {
+    name: "Overcast & Cloudy",
+    gradient: "from-[#1C2E4F] via-[#16253E] to-[#0D1A30]",
+    bgGradient: "linear-gradient(180deg, #1C2E4F 0%, #16253E 50%, #0D1A30 100%)",
+    accentGlow: "rgba(148, 163, 184, 0.25)",
+    skyTone: "text-slate-300",
+    badge: "bg-slate-500/20 text-slate-300 border-slate-500/40",
+  },
   rain: {
     name: "Monsoon Rain",
-    gradient: "from-slate-900/95 via-[#0d2137]/95 to-[#060c16]",
-    accentGlow: "rgba(56, 189, 248, 0.2)",
+    gradient: "from-[#142642] via-[#0F1E35] to-[#0A1729]",
+    bgGradient: "linear-gradient(180deg, #142642 0%, #0F1E35 50%, #0A1729 100%)",
+    accentGlow: "rgba(6, 182, 212, 0.25)",
     skyTone: "text-cyan-300",
     badge: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40",
   },
   thunder: {
     name: "Squall & Thunderstorm",
-    gradient: "from-zinc-950 via-[#131728]/95 to-[#080912]",
+    gradient: "from-[#15132B] via-[#0F1324] to-[#080D1A]",
+    bgGradient: "linear-gradient(180deg, #15132B 0%, #0F1324 50%, #080D1A 100%)",
     accentGlow: "rgba(249, 115, 22, 0.3)",
     skyTone: "text-orange-400",
     badge: "bg-orange-500/20 text-orange-400 border-orange-500/40",
   },
   night: {
     name: "Clear Night",
-    gradient: "from-indigo-950/80 via-[#070b18]/95 to-[#02040a]",
+    gradient: "from-[#10192E] via-[#0B1222] to-[#070C18]",
+    bgGradient: "linear-gradient(180deg, #10192E 0%, #0B1222 50%, #070C18 100%)",
     accentGlow: "rgba(129, 140, 248, 0.2)",
     skyTone: "text-indigo-300",
     badge: "bg-indigo-500/20 text-indigo-300 border-indigo-500/40",
@@ -82,5 +96,13 @@ export const IMD_ALERT_STYLES = {
 };
 
 export function getThemeForCondition(conditionCode = "clear") {
+  if (!conditionCode) return WEATHER_THEMES.clear;
+  const c = conditionCode.toLowerCase();
+  if (c.includes('thunder') || c.includes('squall')) return WEATHER_THEMES.thunder;
+  if (c.includes('rain') || c.includes('drizzle') || c.includes('monsoon')) return WEATHER_THEMES.rain;
+  if (c.includes('sun')) return WEATHER_THEMES.sunny;
+  if (c.includes('overcast') || c.includes('cloud')) return WEATHER_THEMES.overcast;
+  if (c.includes('night')) return WEATHER_THEMES.night;
+  if (c.includes('pleasant')) return WEATHER_THEMES.pleasant;
   return WEATHER_THEMES[conditionCode] || WEATHER_THEMES.clear;
 }

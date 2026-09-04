@@ -63,7 +63,14 @@
     "createdAt": "2026-09-03T22:03:43.982Z",
     "preferences": {
       "activePersonas": [
-        "health"
+        "health",
+        "fitness",
+        "farming",
+        "travel",
+        "beach",
+        "family",
+        "commuter",
+        "events"
       ],
       "answers": {
         "health_sensitivity": "aqi_pm25",
@@ -81,11 +88,13 @@
       ],
       "unit": "celsius",
       "hasCompletedOnboarding": true,
-      "removedWidgetIds": [],
+      "removedWidgetIds": [
+        "beach_tides"
+      ],
       "customAddedWidgetIds": [],
-      "isCustomLifestyle": false
+      "isCustomLifestyle": true
     },
-    "updatedAt": "2026-09-04T10:21:06.411Z"
+    "updatedAt": "2026-09-04T21:28:04.038Z"
   },
   {
     "id": "usr_1788473617963_1wn9y6",
@@ -157,5 +166,85 @@
       "isCustomLifestyle": false
     },
     "updatedAt": "2026-09-04T09:27:59.412Z"
+  },
+  {
+    "id": "usr_1788556392740_v4spa1",
+    "name": "Gandu",
+    "email": "gandu123@gmail.com",
+    "password": "123445",
+    "createdAt": "2026-09-04T21:13:12.740Z",
+    "preferences": {
+      "activePersonas": [
+        "health",
+        "travel",
+        "farming",
+        "family",
+        "fitness",
+        "commuter",
+        "beach",
+        "events"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa",
+        "live_43.48539_13.48222",
+        "live_6.20829_-5.70204"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T21:15:32.540Z"
+  },
+  {
+    "id": "usr_1788556561673_dfxh24",
+    "name": "Gandu",
+    "email": "gandu1234@gmail.com",
+    "password": "12344",
+    "createdAt": "2026-09-04T21:16:01.673Z",
+    "preferences": {
+      "activePersonas": [
+        "health",
+        "travel",
+        "family",
+        "events",
+        "commuter",
+        "beach",
+        "farming",
+        "fitness"
+      ],
+      "answers": {
+        "health_sensitivity": "aqi_pm25",
+        "travel_scope": "domestic",
+        "farming_type": "crop_farmer",
+        "workout_window": "early_morning",
+        "commute_mode": "car_drive"
+      },
+      "pinnedWidgetIds": [],
+      "savedLocationIds": [
+        "delhi",
+        "punjab_farm",
+        "bengaluru",
+        "goa"
+      ],
+      "unit": "celsius",
+      "hasCompletedOnboarding": true,
+      "removedWidgetIds": [],
+      "customAddedWidgetIds": [],
+      "isCustomLifestyle": false
+    },
+    "updatedAt": "2026-09-04T21:30:20.447Z"
   }
 ]

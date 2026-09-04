@@ -48,20 +48,20 @@ export function AlertsScreen() {
       <div className="flex items-center gap-2">
         <button
           onClick={() => setFilterLevel('all')}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+          className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition ${
             filterLevel === 'all' 
-              ? 'bg-sky-500/20 border-sky-400 text-sky-300' 
-              : 'bg-white/5 border-white/10 text-slate-400'
+              ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300' 
+              : 'bg-white/[0.04] border-white/[0.08] text-slate-400 hover:text-white'
           }`}
         >
           All Bulletins ({activeAlerts.length})
         </button>
         <button
           onClick={() => setFilterLevel('orange_red')}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+          className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition ${
             filterLevel === 'orange_red' 
-              ? 'bg-orange-500/25 border-orange-500 text-orange-300' 
-              : 'bg-white/5 border-white/10 text-slate-400'
+              ? 'bg-rose-500/20 border-rose-500/40 text-rose-300' 
+              : 'bg-white/[0.04] border-white/[0.08] text-slate-400 hover:text-white'
           }`}
         >
           Hazardous Only

@@ -58,12 +58,12 @@ export function ProfileScreen({ onOpenOnboarding }) {
 
       {/* 0. Citizen Account Card with Log Out */}
       {user && (
-        <div className="glass-card rounded-3xl p-4 border border-white/10 flex items-center justify-between">
+        <div className="mausam-card rounded-3xl p-4 border border-white/[0.08] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-2xl border flex items-center justify-center ${
               user.isGuest 
                 ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400' 
-                : 'bg-sky-500/20 border-sky-500/30 text-sky-400'
+                : 'bg-cyan-500/20 border-cyan-500/30 text-cyan-400'
             }`}>
               {user.isGuest ? <Zap className="w-5 h-5" /> : <User className="w-5 h-5" />}
             </div>
@@ -71,7 +71,7 @@ export function ProfileScreen({ onOpenOnboarding }) {
               <div className="text-xs font-bold text-white flex items-center gap-1.5">
                 <span>{user.name}</span>
                 {user.isGuest && (
-                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-extrabold uppercase">
+                  <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold uppercase">
                     Guest Mode
                   </span>
                 )}
@@ -82,7 +82,7 @@ export function ProfileScreen({ onOpenOnboarding }) {
 
           <button
             onClick={logout}
-            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-500/30 text-xs font-semibold text-slate-300 hover:text-rose-300 transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-rose-500/20 border border-white/[0.08] hover:border-rose-500/30 text-xs font-semibold text-slate-300 hover:text-rose-300 transition flex items-center gap-1.5"
             title="Log out and return to Welcome page"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -92,18 +92,18 @@ export function ProfileScreen({ onOpenOnboarding }) {
       )}
 
       {/* 1. Active Persona Multi-Selector */}
-      <div className="glass-card rounded-3xl p-5 border border-white/10 space-y-3">
+      <div className="mausam-card rounded-3xl p-5 border border-white/[0.08] space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className={`w-4 h-4 ${isCustomLifestyle ? 'text-amber-400' : 'text-sky-400'}`} />
+            <Sparkles className={`w-4 h-4 ${isCustomLifestyle ? 'text-amber-400' : 'text-cyan-400'}`} />
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Your Lifestyle Interests
             </h3>
           </div>
-          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+          <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${
             isCustomLifestyle 
               ? 'bg-amber-500/15 border-amber-500/30 text-amber-300' 
-              : 'bg-sky-500/10 border-sky-500/20 text-sky-400'
+              : 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400'
           }`}>
             {isCustomLifestyle ? 'Custom Setup Active' : `${activePersonas.length} Active`}
           </span>
@@ -137,15 +137,15 @@ export function ProfileScreen({ onOpenOnboarding }) {
                 onClick={() => togglePersona(cat.id)}
                 className={`p-3 rounded-2xl border text-left transition flex items-center justify-between ${
                   isSelected 
-                    ? 'bg-sky-500/20 border-sky-400 text-white font-bold' 
-                    : 'bg-white/5 border-white/5 text-slate-400 hover:text-slate-200'
+                    ? 'bg-cyan-500/20 border-cyan-400 text-white font-bold shadow-glow-cyan' 
+                    : 'bg-white/[0.04] border-white/[0.08] text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <Icon className={`w-4 h-4 ${isSelected ? 'text-sky-400' : 'text-slate-400'}`} />
+                  <Icon className={`w-4 h-4 ${isSelected ? 'text-cyan-400' : 'text-slate-400'}`} />
                   <span className="text-xs">{cat.title}</span>
                 </div>
-                {isSelected && <Check className="w-3.5 h-3.5 text-sky-400" />}
+                {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
               </button>
             );
           })}
@@ -153,7 +153,7 @@ export function ProfileScreen({ onOpenOnboarding }) {
       </div>
 
       {/* 2. Pinned Top-Priority Cards Manager */}
-      <div className="glass-card rounded-3xl p-5 border border-white/10 space-y-3">
+      <div className="mausam-card rounded-3xl p-5 border border-white/[0.08] space-y-3 shadow-glass">
         <div className="flex items-center gap-2">
           <Pin className="w-4 h-4 text-amber-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -166,17 +166,17 @@ export function ProfileScreen({ onOpenOnboarding }) {
         </p>
 
         {pinnedWidgetIds.length === 0 ? (
-          <div className="p-3 rounded-2xl bg-white/5 border border-white/5 text-center text-xs text-slate-400">
+          <div className="p-3.5 rounded-2xl bg-[#111A2E]/70 border border-white/[0.06] text-center text-xs text-slate-400">
             No widgets pinned yet. Tap the pin icon on any widget card to lock it to the top.
           </div>
         ) : (
           <div className="space-y-1.5">
             {pinnedWidgetIds.map(wId => (
-              <div key={wId} className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs text-white">
-                <span className="capitalize">{wId.replace('_', ' ')}</span>
+              <div key={wId} className="flex items-center justify-between p-3 rounded-2xl bg-[#111A2E]/70 border border-white/[0.06] text-xs text-white">
+                <span className="capitalize font-medium text-slate-200">{wId.replace('_', ' ')}</span>
                 <button
                   onClick={() => togglePinWidget(wId)}
-                  className="text-xs text-rose-400 hover:text-rose-300 font-semibold"
+                  className="text-xs text-rose-400 hover:text-rose-300 font-semibold px-2 py-1 rounded-lg hover:bg-rose-500/10 transition-colors"
                 >
                   Unpin
                 </button>
@@ -187,31 +187,31 @@ export function ProfileScreen({ onOpenOnboarding }) {
       </div>
 
       {/* 3. Measurement Units */}
-      <div className="glass-card rounded-3xl p-5 border border-white/10 space-y-3">
+      <div className="mausam-card rounded-3xl p-5 border border-white/[0.08] space-y-3 shadow-glass">
         <div className="flex items-center gap-2">
-          <Settings2 className="w-4 h-4 text-slate-400" />
+          <Settings2 className="w-4 h-4 text-cyan-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Meteorological Measurement Units
           </h3>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           <button
             onClick={() => setUnit('celsius')}
-            className={`p-2.5 rounded-xl border text-xs font-semibold transition ${
+            className={`p-3 rounded-2xl border text-xs font-semibold transition-all ${
               unit === 'celsius'
-                ? 'bg-sky-500/20 border-sky-400 text-sky-300'
-                : 'bg-white/5 border-white/5 text-slate-400'
+                ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300 shadow-glow-cyan'
+                : 'bg-[#111A2E]/70 border-white/[0.06] text-slate-400 hover:bg-[#111A2E] hover:text-white'
             }`}
           >
             Metric (°C, km/h, mm)
           </button>
           <button
             onClick={() => setUnit('fahrenheit')}
-            className={`p-2.5 rounded-xl border text-xs font-semibold transition ${
+            className={`p-3 rounded-2xl border text-xs font-semibold transition-all ${
               unit === 'fahrenheit'
-                ? 'bg-sky-500/20 border-sky-400 text-sky-300'
-                : 'bg-white/5 border-white/5 text-slate-400'
+                ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300 shadow-glow-cyan'
+                : 'bg-[#111A2E]/70 border-white/[0.06] text-slate-400 hover:bg-[#111A2E] hover:text-white'
             }`}
           >
             Imperial (°F, mph, in)
@@ -219,19 +219,9 @@ export function ProfileScreen({ onOpenOnboarding }) {
         </div>
       </div>
 
-      {/* 4. Onboarding & Reset */}
-      <div className="space-y-2">
-        <button
-          onClick={onOpenOnboarding}
-          className="w-full py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white text-xs font-bold flex items-center justify-center gap-2 transition"
-        >
-          <RotateCcw className="w-3.5 h-3.5 text-sky-400" />
-          <span>Re-run Guided Onboarding Flow</span>
-        </button>
-      </div>
 
       {/* Official MoES & SIH 2026 Credits */}
-      <div className="p-4 rounded-2xl bg-black/40 border border-white/5 text-center text-[11px] text-slate-400 space-y-1">
+      <div className="p-4 rounded-3xl bg-[#0B1220]/80 border border-white/[0.06] text-center text-[11px] text-slate-400 space-y-1">
         <div className="flex items-center justify-center gap-1.5 text-white font-bold">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
           <span>Ministry of Earth Sciences (MoES) & IMD</span>

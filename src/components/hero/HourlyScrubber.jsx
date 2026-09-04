@@ -39,16 +39,16 @@ export function HourlyScrubber() {
   const showHealth = activePersonas.includes('health');
 
   return (
-    <div className="w-full glass-card rounded-3xl p-4 mb-5 border border-white/10">
+    <div className="w-full mausam-card rounded-3xl p-5 mb-5 border border-white/[0.08]">
       <div className="flex items-center justify-between mb-3 px-1">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-sky-400" />
+          <Clock className="w-4 h-4 text-cyan-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Hourly Scrubber & Timeline
           </h3>
         </div>
         {selectedHour && (
-          <div className="text-[11px] text-sky-400 font-semibold flex items-center gap-1.5 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/20">
+          <div className="text-[11px] text-cyan-300 font-semibold flex items-center gap-1.5 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
             <span>{selectedHour.time}: {selectedHour.condition}</span>
             <span>• {selectedHour.pop}% Rain</span>
           </div>
@@ -56,7 +56,7 @@ export function HourlyScrubber() {
       </div>
 
       {/* Horizontal Scrollable Scrubber */}
-      <div className="flex items-center gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar scroll-smooth">
+      <div className="flex items-center gap-3 overflow-x-auto py-2 px-1 no-scrollbar scroll-smooth">
         {hourly.map((hour, idx) => {
           const isSelected = selectedHourIndex === idx;
           const isHighRain = hour.pop >= 60;
@@ -64,10 +64,10 @@ export function HourlyScrubber() {
             <button
               key={idx}
               onClick={() => setSelectedHourIndex(idx)}
-              className={`flex-shrink-0 w-16 py-3 px-2 rounded-2xl flex flex-col items-center justify-between gap-1.5 transition-all duration-200 border text-center ${
+              className={`flex-shrink-0 w-16 py-3 px-2 rounded-2xl flex flex-col items-center justify-between gap-1.5 transition-all duration-200 text-center relative ${
                 isSelected
-                  ? 'bg-sky-500/25 border-sky-400 text-white shadow-[0_0_15px_rgba(56,189,248,0.3)] scale-105'
-                  : 'bg-white/5 border-white/5 text-slate-300 hover:bg-white/10'
+                  ? 'bg-cyan-500/25 border-2 border-cyan-400 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)]'
+                  : 'bg-white/[0.04] border border-white/[0.07] text-slate-300 hover:bg-white/[0.08]'
               }`}
             >
               <span className="text-[11px] font-semibold text-slate-300">{hour.time}</span>

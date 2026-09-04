@@ -58,22 +58,22 @@ export function AuthScreen({ initialMode = 'login' }) {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#050814] text-white flex flex-col justify-between p-6 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-[#0B1220] via-[#0E1626] to-[#111A2E] text-white flex flex-col justify-between p-6 relative overflow-hidden">
       {/* Background glow orbs */}
-      <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-sky-500/15 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-blue-600/15 blur-3xl pointer-events-none" />
+      <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
 
       {/* 1. Header with Back Button */}
       <div className="relative z-10 max-w-sm mx-auto w-full pt-2 flex items-center justify-between">
         <button
           onClick={() => setAuthView('welcome')}
-          className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 transition"
+          className="w-10 h-10 rounded-2xl bg-[#1A2436]/80 border border-white/[0.08] flex items-center justify-center text-slate-300 hover:text-white hover:bg-[#1A2436] transition shadow-glass"
           title="Back to Welcome Page"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
+        <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium px-3 py-1.5 rounded-full bg-[#1A2436]/80 border border-white/[0.08]">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
           <span>MoES Secure Citizen Portal</span>
         </div>
@@ -81,9 +81,9 @@ export function AuthScreen({ initialMode = 'login' }) {
 
       {/* 2. Main Auth Card */}
       <div className="relative z-10 max-w-sm mx-auto w-full my-auto py-6">
-        <div className="glass-card rounded-3xl p-6 border border-white/15 shadow-2xl space-y-5">
+        <div className="mausam-card rounded-3xl p-6 border border-white/[0.08] shadow-glass space-y-5">
           <div>
-            <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
               {mode === 'login' ? 'Citizen Account Access' : 'New Citizen Registration'}
             </span>
             <h2 className="text-2xl font-black text-white mt-1">
@@ -97,8 +97,8 @@ export function AuthScreen({ initialMode = 'login' }) {
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-xs text-rose-300 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/25 text-xs text-rose-300 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-400" />
               <span>{error}</span>
             </div>
           )}
@@ -115,7 +115,7 @@ export function AuthScreen({ initialMode = 'login' }) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Roshan Kumar"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400/60 transition"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#111A2E]/80 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/60 transition"
                   />
                 </div>
               </div>
@@ -140,12 +140,12 @@ export function AuthScreen({ initialMode = 'login' }) {
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); setError(''); }}
                   placeholder="yourname@gmail.com"
-                  className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border text-xs text-white placeholder-slate-500 focus:outline-none transition ${
+                  className={`w-full pl-10 pr-4 py-3 rounded-2xl bg-[#111A2E]/80 border text-xs text-white placeholder-slate-500 focus:outline-none transition ${
                     isEmailValidGmail 
                       ? 'border-emerald-500/40 focus:border-emerald-400' 
                       : showEmailHint 
                       ? 'border-amber-500/50 focus:border-amber-400' 
-                      : 'border-white/10 focus:border-sky-400/60'
+                      : 'border-white/[0.08] focus:border-cyan-400/60'
                   }`}
                 />
               </div>
@@ -165,7 +165,7 @@ export function AuthScreen({ initialMode = 'login' }) {
                   <button
                     type="button"
                     onClick={() => alert('Password reset link will be sent to your Gmail address.')}
-                    className="text-[10px] text-sky-400 hover:text-sky-300 font-medium"
+                    className="text-[10px] text-cyan-400 hover:text-cyan-300 font-medium"
                   >
                     Forgot Password?
                   </button>
@@ -178,7 +178,7 @@ export function AuthScreen({ initialMode = 'login' }) {
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(''); }}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400/60 transition"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#111A2E]/80 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/60 transition"
                 />
               </div>
             </div>
@@ -187,7 +187,7 @@ export function AuthScreen({ initialMode = 'login' }) {
             <button
               type="submit"
               disabled={authLoading}
-              className="w-full mt-2 py-3 px-4 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-xs tracking-wider uppercase shadow-lg shadow-sky-500/25 transition active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full mt-2 py-3.5 px-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-bold text-xs tracking-wider uppercase shadow-glow-cyan transition active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {authLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -208,7 +208,7 @@ export function AuthScreen({ initialMode = 'login' }) {
                 <button
                   type="button"
                   onClick={() => { setMode('signup'); setError(''); }}
-                  className="text-sky-400 hover:text-sky-300 font-bold ml-1"
+                  className="text-cyan-400 hover:text-cyan-300 font-bold ml-1"
                 >
                   Sign Up
                 </button>
@@ -219,7 +219,7 @@ export function AuthScreen({ initialMode = 'login' }) {
                 <button
                   type="button"
                   onClick={() => { setMode('login'); setError(''); }}
-                  className="text-sky-400 hover:text-sky-300 font-bold ml-1"
+                  className="text-cyan-400 hover:text-cyan-300 font-bold ml-1"
                 >
                   Log In
                 </button>

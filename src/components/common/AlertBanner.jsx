@@ -5,18 +5,20 @@ import { IMD_ALERT_STYLES } from '../../utils/weatherThemes';
 export function AlertBanner({ alerts = [] }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  if (!alerts || alerts.length === 0) return null;
+  // Only show when high-severity Orange or Red IMD warnings are active
+  const severeAlerts = (alerts || []).filter(a => a?.level === 'orange' || a?.level === 'red');
+  if (severeAlerts.length === 0) return null;
 
-  const primaryAlert = alerts[0];
-  const style = IMD_ALERT_STYLES[primaryAlert.level] || IMD_ALERT_STYLES.yellow;
+  const primaryAlert = severeAlerts[0];
+  const style = IMD_ALERT_STYLES[primaryAlert.level] || IMD_ALERT_STYLES.orange;
 
   return (
-    <div className={`w-full rounded-2xl border transition-all duration-300 overflow-hidden ${style.border} ${style.glow} bg-[#0c1424]/90 backdrop-blur-xl mb-4`}>
+    <div className={`w-full rounded-3xl border transition-all duration-300 overflow-hidden ${style.border} ${style.glow} mausam-card mb-4`}>
       <div 
         onClick={() => setIsExpanded(prev => !prev)}
-        className="p-3.5 flex items-start gap-3 cursor-pointer hover:bg-white/[0.02] transition"
+        className="p-4 flex items-start gap-3 cursor-pointer hover:bg-white/[0.04] transition"
       >
-        <div className={`mt-0.5 p-2 rounded-xl border ${style.badgeBg} flex-shrink-0`}>
+        <div className={`mt-0.5 w-9 h-9 rounded-2xl border ${style.badgeBg} backdrop-blur-md flex items-center justify-center flex-shrink-0`}>
           <AlertTriangle className="w-4 h-4" />
         </div>
 
@@ -48,7 +50,7 @@ export function AlertBanner({ alerts = [] }) {
 
       {/* Expanded Official Instructions & Actionable Protocol */}
       {isExpanded && (
-        <div className="px-4 pb-4 pt-1 border-t border-white/5 bg-black/20 text-xs text-slate-300 space-y-2.5 animate-fade-in">
+        <div className="px-4 pb-4 pt-2 border-t border-white/[0.08] bg-black/20 backdrop-blur-md text-xs text-slate-300 space-y-2.5 animate-fade-in">
           <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
             <ShieldAlert className="w-3.5 h-3.5 text-sky-400" />
             Issued by: {primaryAlert.issuedBy}

@@ -15,36 +15,38 @@ export default {
           red: "#EF4444",      // Warning / Take Action
         },
         mausam: {
-          dark: "#0B111E",
-          canvas: "#0B111E",
-          card: "#131B2E",
-          cardHover: "#19243C",
-          subcard: "#1A233B",
-          subcardHover: "#202C48",
+          dark: "#0B1220",
+          canvas: "#0B1220",
+          card: "rgba(26, 36, 54, 0.78)",
+          cardHover: "rgba(33, 46, 69, 0.88)",
+          subcard: "rgba(255, 255, 255, 0.05)",
+          subcardHover: "rgba(255, 255, 255, 0.08)",
           border: "rgba(255, 255, 255, 0.08)",
-          borderActive: "rgba(255, 255, 255, 0.16)",
-          glow: "rgba(0, 229, 255, 0.15)",
+          borderLight: "rgba(255, 255, 255, 0.12)",
+          glow: "rgba(6, 182, 212, 0.2)",
         },
-        // High-contrast vibrant visual data accents extracted from design specification
+        // Design system accents
         accent: {
-          green: "#00E676",   // Neon Green (Good AQI, Peak health, Active)
-          cyan: "#00E5FF",    // Electric Cyan (Moisture, Tides, Water trails)
-          yellow: "#FFD600",  // Bright Neon Yellow (Moderate, Lightning, Daylight)
-          orange: "#FF6D00",  // Radiant Coral/Orange (Elevated risk, Concert warning)
-          red: "#FF3D00",     // Vivid Red (Severe alert, Hazardous AQI)
+          cyan: "#06B6D4",    // Primary cyan
+          teal: "#2DD4BF",    // Primary teal
+          yellow: "#FACC15",  // Secondary warning/solar
+          coral: "#F87171",   // Secondary coral/risk
+          green: "#22C55E",   // Success / good status
+          amber: "#F59E0B",   // Warning status
+          red: "#EF4444",     // Danger status
         }
       },
       borderRadius: {
-        '2xl': '1.25rem',    // 20px
-        '3xl': '1.75rem',    // 28px
-        '4xl': '2.25rem',    // 36px
+        'xl': '0.875rem',    // 14px
+        '2xl': '1rem',       // 16px (nested pills)
+        '3xl': '1.5rem',     // 24px (standard cards)
+        '4xl': '2rem',       // 32px
       },
       boxShadow: {
-        'card': '0 8px 32px 0 rgba(0, 0, 0, 0.45)',
-        'card-hover': '0 12px 40px 0 rgba(0, 0, 0, 0.6)',
-        'subcard': '0 4px 20px 0 rgba(0, 0, 0, 0.25)',
-        'glow-cyan': '0 0 20px rgba(0, 229, 255, 0.25)',
-        'glow-green': '0 0 20px rgba(0, 230, 118, 0.25)',
+        'glass': '0 10px 30px -10px rgba(0, 0, 0, 0.5)',
+        'glass-hover': '0 16px 36px -8px rgba(0, 0, 0, 0.6)',
+        'glow-cyan': '0 0 24px rgba(6, 182, 212, 0.3)',
+        'glow-teal': '0 0 24px rgba(45, 212, 191, 0.3)',
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'Roboto', 'system-ui', '-apple-system', 'sans-serif'],

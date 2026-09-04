@@ -7,10 +7,10 @@ export function ForecastSection() {
   const daily = weatherData.daily || [];
 
   return (
-    <div className="w-full glass-card rounded-3xl p-5 mb-5 border border-white/10">
+    <div className="w-full mausam-card rounded-3xl p-5 mb-5 border border-white/[0.08]">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-sky-400" />
+          <Calendar className="w-4 h-4 text-cyan-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
             7-Day Meteorological Outlook
           </h3>
@@ -52,9 +52,9 @@ export function ForecastSection() {
               </span>
 
               {/* Visual Temperature Bar */}
-              <div className="flex-1 h-2 bg-slate-800 rounded-full relative overflow-hidden">
+              <div className="flex-1 h-2 bg-white/[0.08] rounded-full relative overflow-hidden">
                 <div 
-                  className="absolute top-0 bottom-0 rounded-full bg-gradient-to-r from-sky-400 via-amber-400 to-rose-400"
+                  className="absolute top-0 bottom-0 rounded-full bg-gradient-to-r from-teal-400 via-amber-400 to-rose-400"
                   style={{
                     left: `${leftPercent}%`,
                     width: `${widthPercent}%`,

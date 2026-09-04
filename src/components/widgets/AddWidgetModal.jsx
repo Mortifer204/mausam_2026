@@ -70,11 +70,11 @@ export function AddWidgetModal({ isOpen, onClose, hiddenWidgets = [] }) {
       />
 
       {/* Modal Container */}
-      <div className="relative z-10 w-full max-w-md max-h-[85vh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-[#091022] border border-white/15 shadow-2xl overflow-hidden animate-slide-up">
+      <div className="relative z-10 w-full max-w-md max-h-[85vh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-[#111A2E]/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl overflow-hidden animate-slide-up">
         {/* Header */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30">
+        <div className="p-5 border-b border-white/[0.08] flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2.5 rounded-2xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-glow-cyan">
               <Plus className="w-5 h-5" />
             </div>
             <div>
@@ -85,7 +85,7 @@ export function AddWidgetModal({ isOpen, onClose, hiddenWidgets = [] }) {
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition"
+            className="p-2 rounded-2xl bg-[#1A2436]/80 border border-white/[0.08] text-slate-400 hover:text-white hover:bg-[#1A2436] transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -116,16 +116,16 @@ export function AddWidgetModal({ isOpen, onClose, hiddenWidgets = [] }) {
                 return (
                   <div
                     key={widget.id}
-                    className="p-3.5 rounded-2xl glass-card border border-white/10 hover:border-sky-400/40 transition flex items-center justify-between gap-3 group"
+                    className="p-3.5 rounded-2xl mausam-subcard border border-white/[0.06] hover:border-cyan-500/30 transition-all flex items-center justify-between gap-3 group"
                   >
                     <div className="flex items-start gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-sky-400 flex-shrink-0 group-hover:scale-105 transition-transform">
+                      <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0 group-hover:scale-105 transition-transform">
                         <Icon className="w-5 h-5" />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs font-bold text-white truncate">{widget.title}</span>
-                          <span className="text-[8px] uppercase tracking-wider px-1.5 py-0.2 rounded bg-white/5 text-slate-400 border border-white/10">
+                          <span className="text-[8px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#111A2E] text-slate-400 border border-white/[0.06]">
                             {widget.category}
                           </span>
                         </div>
@@ -140,7 +140,7 @@ export function AddWidgetModal({ isOpen, onClose, hiddenWidgets = [] }) {
                         addWidget(widget.id);
                         onClose();
                       }}
-                      className="flex-shrink-0 py-2 px-3 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 hover:text-white border border-sky-400/40 font-bold text-xs flex items-center gap-1 transition active:scale-95 shadow-sm"
+                      className="flex-shrink-0 py-2 px-3.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 hover:text-white border border-cyan-500/30 font-bold text-xs flex items-center gap-1 transition active:scale-95 shadow-glow-cyan"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add</span>
@@ -153,7 +153,7 @@ export function AddWidgetModal({ isOpen, onClose, hiddenWidgets = [] }) {
         </div>
 
         {/* Modal Footer Note */}
-        <div className="p-3 bg-black/40 border-t border-white/10 text-center text-[10px] text-slate-400">
+        <div className="p-3 bg-[#0B1220]/80 border-t border-white/[0.08] text-center text-[10px] text-slate-400">
           Adding any widget automatically switches your configuration to <strong>Custom Setup</strong>.
         </div>
       </div>

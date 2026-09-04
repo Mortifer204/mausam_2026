@@ -25,6 +25,7 @@ export function AuthProvider({ children }) {
   const [authView, setAuthView] = useState('welcome'); // 'welcome' | 'login' | 'signup'
   const [authLoading, setAuthLoading] = useState(false);
   const [lastUserPreferences, setLastUserPreferences] = useState(null);
+  const [shouldOpenOnboarding, setShouldOpenOnboarding] = useState(false);
 
   // Persist session to localStorage for active tab
   useEffect(() => {
@@ -64,6 +65,7 @@ export function AuthProvider({ children }) {
       }
 
       setUser(data.user);
+      setShouldOpenOnboarding(true);
       if (data.preferences) {
         if (data.user?.email) {
           try {
@@ -108,6 +110,7 @@ export function AuthProvider({ children }) {
       }
 
       setUser(data.user);
+      setShouldOpenOnboarding(true);
       if (data.preferences) {
         if (data.user?.email) {
           try {
@@ -137,6 +140,7 @@ export function AuthProvider({ children }) {
     };
     setUser(guestUser);
     setLastUserPreferences(null);
+    setShouldOpenOnboarding(true);
   };
 
   /**
@@ -145,6 +149,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     setLastUserPreferences(null);
+    setShouldOpenOnboarding(false);
     setAuthView('welcome');
   };
 
@@ -161,6 +166,8 @@ export function AuthProvider({ children }) {
         signup,
         continueAsGuest,
         logout,
+        shouldOpenOnboarding,
+        setShouldOpenOnboarding,
         isValidGmail
       }}
     >

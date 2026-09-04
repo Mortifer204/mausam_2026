@@ -124,15 +124,15 @@ export function SavedLocationsScreen({ onSelectLocation }) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search any Indian city (e.g. Patna, Jaipur, Lucknow, Kochi)..."
-          className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400/50 transition"
+          className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/50 transition"
         />
         {isSearching && (
-          <Loader2 className="w-4 h-4 text-sky-400 absolute right-3.5 top-1/2 -translate-y-1/2 animate-spin" />
+          <Loader2 className="w-4 h-4 text-cyan-400 absolute right-3.5 top-1/2 -translate-y-1/2 animate-spin" />
         )}
 
         {/* Live Search Suggestions Dropdown */}
         {searchResults.length > 0 && (
-          <div className="absolute top-12 left-0 right-0 z-30 p-2 rounded-2xl bg-[#0e1628] border border-white/15 shadow-2xl backdrop-blur-2xl space-y-1 animate-fade-in">
+          <div className="absolute top-12 left-0 right-0 z-30 p-2.5 rounded-3xl bg-[#111A2E]/95 border border-white/[0.08] shadow-2xl backdrop-blur-2xl space-y-1 animate-fade-in">
             <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 py-1">
               Live City Results (Tap to Fetch Real Weather):
             </div>
@@ -140,10 +140,10 @@ export function SavedLocationsScreen({ onSelectLocation }) {
               <button
                 key={city.id}
                 onClick={() => handleSelectSearchedCity(city)}
-                className="w-full p-2.5 rounded-xl hover:bg-sky-500/20 text-left text-xs text-slate-200 hover:text-white flex items-center justify-between transition border border-transparent hover:border-sky-500/30"
+                className="w-full p-2.5 rounded-xl hover:bg-cyan-500/20 text-left text-xs text-slate-200 hover:text-white flex items-center justify-between transition border border-transparent hover:border-cyan-500/30"
               >
                 <div className="flex items-center gap-2">
-                  <Globe2 className="w-4 h-4 text-sky-400" />
+                  <Globe2 className="w-4 h-4 text-cyan-400" />
                   <div>
                     <span className="font-bold text-white">{city.name}</span>
                     <span className="text-[10px] text-slate-400 ml-1.5">
@@ -151,7 +151,7 @@ export function SavedLocationsScreen({ onSelectLocation }) {
                     </span>
                   </div>
                 </div>
-                <span className="text-[10px] text-sky-300 font-semibold bg-sky-500/15 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] text-cyan-300 font-semibold bg-cyan-500/15 px-2 py-0.5 rounded-full">
                   Fetch Live
                 </span>
               </button>
@@ -178,10 +178,10 @@ export function SavedLocationsScreen({ onSelectLocation }) {
                 changeLocation(loc.id);
                 onSelectLocation?.();
               }}
-              className={`glass-card-interactive rounded-3xl p-4 border cursor-pointer relative overflow-hidden transition-all ${
+              className={`mausam-card-interactive rounded-3xl p-4 border cursor-pointer relative overflow-hidden transition-all ${
                 isSelected 
-                  ? 'border-sky-400 bg-sky-500/15 shadow-[0_0_20px_rgba(56,189,248,0.25)]' 
-                  : 'border-white/10'
+                  ? 'border-cyan-400 bg-cyan-500/15 shadow-glow-cyan' 
+                  : 'border-white/[0.08]'
               }`}
             >
               <div className="flex items-start justify-between">

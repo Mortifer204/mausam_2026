@@ -55,6 +55,7 @@ export function TravelPackingWidget({ weatherData, onSelect, isHero = false }) {
   const [isSearching, setIsSearching] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showChecklistAndAdvisory, setShowChecklistAndAdvisory] = useState(false);
 
   // 1. Fetch Real Live Weather for Destination
   useEffect(() => {
@@ -226,15 +227,13 @@ export function TravelPackingWidget({ weatherData, onSelect, isHero = false }) {
 
   return (
     <div 
-      onClick={() => onSelect?.('travel_packing')}
-      className={`glass-card-interactive rounded-3xl p-5 border border-white/10 cursor-pointer relative overflow-hidden group ${
-        isHero ? 'bg-gradient-to-br from-[#101b33]/90 to-[#0e1626]/95' : ''
-      }`}
+      onClick={() => setShowChecklistAndAdvisory(prev => !prev)}
+      className="mausam-card-interactive rounded-3xl p-5 border border-white/[0.08] cursor-pointer relative overflow-hidden group select-none transition-all duration-300"
     >
       {/* Top Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30">
+          <div className="w-8 h-8 rounded-2xl bg-cyan-500/15 border border-cyan-500/25 flex items-center justify-center text-cyan-400">
             <Plane className="w-4 h-4" />
           </div>
           <div>
@@ -249,18 +248,18 @@ export function TravelPackingWidget({ weatherData, onSelect, isHero = false }) {
       </div>
 
       {/* Destination Selector Bar (Interactive!) */}
-      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-sky-500/15 via-blue-500/10 to-indigo-500/15 border border-sky-400/30 mb-3 space-y-2">
+      <div className="p-3.5 rounded-2xl mausam-subcard border border-white/[0.08] mb-3 space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-sky-400 uppercase font-bold tracking-wider flex items-center gap-1">
-              <MapPin className="w-3 h-3 text-sky-400" /> Destination
+            <span className="text-[10px] text-cyan-400 uppercase font-bold tracking-wider flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-cyan-400" /> Destination
             </span>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsSearchOpen(p => !p);
               }}
-              className="text-[10px] text-sky-300 hover:text-white font-bold bg-sky-400/20 hover:bg-sky-400/30 px-2 py-0.5 rounded-full border border-sky-400/40 flex items-center gap-1 transition"
+              className="text-[10px] text-cyan-300 hover:text-white font-bold bg-cyan-400/20 hover:bg-cyan-400/30 px-2 py-0.5 rounded-full border border-cyan-400/40 flex items-center gap-1 transition"
             >
               <span>Change</span>
               <ChevronDown className={`w-3 h-3 transition-transform ${isSearchOpen ? 'rotate-180' : ''}`} />
@@ -394,97 +393,139 @@ export function TravelPackingWidget({ weatherData, onSelect, isHero = false }) {
         )}
       </div>
 
-      {/* Smart Real-Weather Packing Checklist */}
-      <div className="space-y-2 mb-3">
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <Luggage className="w-3.5 h-3.5 text-sky-400" />
-            <span>Packing Essentials for {destination.name}</span>
-          </span>
-          <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-            <Sparkles className="w-3 h-3" /> Live Weather-Driven
-          </span>
+      {/* Smart Real-Weather Packing Checklist & Real-time Route Advisory (Hidden by default, shown on click) */}
+      {!showChecklistAndAdvisory ? (
+        /* Collapsed State: Sleek interactive prompt button */
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowChecklistAndAdvisory(true);
+          }}
+          className="w-full py-2.5 px-3.5 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/15 border border-cyan-500/25 hover:border-cyan-500/40 text-cyan-300 text-xs font-bold flex items-center justify-between transition-all active:scale-[0.99] group/btn mb-1"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <Luggage className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+            <span className="truncate">View Packing Checklist & Route Advisory</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 flex-shrink-0">
+              {sortedPackingList.length} items
+            </span>
+          </div>
+          <ChevronDown className="w-4 h-4 text-cyan-400 transition-transform group-hover/btn:translate-y-0.5 flex-shrink-0" />
         </div>
+      ) : (
+        /* Expanded State: Checklist + Route Advisory Card */
+        <div className="space-y-3 mb-3 animate-fade-in" onClick={e => e.stopPropagation()}>
+          {/* Smart Real-Weather Packing Checklist */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <Luggage className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Packing Essentials for {destination.name}</span>
+              </span>
+              <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                <Sparkles className="w-3 h-3" /> Live Weather-Driven
+              </span>
+            </div>
 
-        <div className="space-y-1.5">
-          {displayedPackingList.map((item, idx) => {
-            const isChecked = !!checkedItems[item.item];
-            return (
-              <div 
-                key={item.item || idx}
+            <div className="space-y-1.5">
+              {displayedPackingList.map((item, idx) => {
+                const isChecked = !!checkedItems[item.item];
+                return (
+                  <div 
+                    key={item.item || idx}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleCheck(item.item);
+                    }}
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl border text-xs cursor-pointer transition ${
+                      isChecked 
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-slate-400 line-through' 
+                        : 'bg-white/5 border-white/5 text-slate-200 hover:bg-white/10 hover:border-white/15'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      {isChecked ? (
+                        <CheckSquare className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                      ) : (
+                        <Square className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                      )}
+                      <div className="min-w-0">
+                        <span className="font-semibold text-white block truncate">{item.item}</span>
+                        <span className="text-[10px] text-slate-400 block truncate">{item.reason}</span>
+                      </div>
+                    </div>
+
+                    {item.essential && (
+                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 flex-shrink-0 ml-2">
+                        Must Pack
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Extend / Minimize Toggle Button */}
+            {sortedPackingList.length > 2 && (
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleCheck(item.item);
+                  setIsExpanded(prev => !prev);
                 }}
-                className={`flex items-center justify-between px-3 py-2.5 rounded-xl border text-xs cursor-pointer transition ${
-                  isChecked 
-                    ? 'bg-emerald-500/10 border-emerald-500/30 text-slate-400 line-through' 
-                    : 'bg-white/5 border-white/5 text-slate-200 hover:bg-white/10 hover:border-white/15'
-                }`}
+                className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-cyan-500/15 border border-white/10 hover:border-cyan-500/30 text-xs font-semibold text-cyan-300 hover:text-cyan-200 flex items-center justify-center gap-1.5 transition active:scale-[0.98] mt-1.5"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  {isChecked ? (
-                    <CheckSquare className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  ) : (
-                    <Square className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                  )}
-                  <div className="min-w-0">
-                    <span className="font-semibold text-white block truncate">{item.item}</span>
-                    <span className="text-[10px] text-slate-400 block truncate">{item.reason}</span>
-                  </div>
-                </div>
-
-                {item.essential && (
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 flex-shrink-0 ml-2">
-                    Must Pack
-                  </span>
+                {isExpanded ? (
+                  <>
+                    <span>Minimize List</span>
+                    <ChevronUp className="w-3.5 h-3.5" />
+                  </>
+                ) : (
+                  <>
+                    <span>Show {remainingCount} More Items</span>
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </>
                 )}
-              </div>
-            );
-          })}
-        </div>
+              </button>
+            )}
+          </div>
 
-        {/* Extend / Minimize Toggle Button */}
-        {sortedPackingList.length > 2 && (
+          {/* Real-time In-Route Travel Advisory Note */}
+          <div className="p-3 rounded-2xl bg-white/5 border border-white/5 text-xs text-slate-300 space-y-1">
+            <div className="flex items-center gap-1.5 text-cyan-400 font-bold text-[11px] uppercase tracking-wider">
+              <AlertCircle className="w-3.5 h-3.5" />
+              <span>Real Route Advisory ({weatherData?.name} ➔ {destination.name})</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-300">
+              {pop > 50
+                ? `High rainfall probability (${pop}%) active in ${destination.name}. Flight and highway traffic may experience holding patterns.`
+                : tempDelta < -8
+                ? `Significant temperature drop of ${Math.abs(tempDelta)}°C from ${weatherData?.name}. Carry thermal wear for evening arrival.`
+                : `Favorable travel conditions in ${destination.name} with ${currentDest.temp}°C and calm winds.`}
+            </p>
+          </div>
+
+          {/* Hide / Collapse Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsExpanded(prev => !prev);
+              setShowChecklistAndAdvisory(false);
             }}
-            className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-sky-500/15 border border-white/10 hover:border-sky-500/30 text-xs font-semibold text-sky-300 hover:text-sky-200 flex items-center justify-center gap-1.5 transition active:scale-[0.98] mt-1.5"
+            className="w-full py-2 px-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition active:scale-[0.98]"
           >
-            {isExpanded ? (
-              <>
-                <span>Minimize List</span>
-                <ChevronUp className="w-3.5 h-3.5" />
-              </>
-            ) : (
-              <>
-                <span>Show {remainingCount} More Items</span>
-                <ChevronDown className="w-3.5 h-3.5" />
-              </>
-            )}
+            <span>Hide Packing Checklist & Route Advisory</span>
+            <ChevronUp className="w-3.5 h-3.5 text-cyan-400" />
           </button>
-        )}
-      </div>
-
-      {/* Real-time In-Route Travel Advisory Note */}
-      <div className="p-3 rounded-2xl bg-white/5 border border-white/5 text-xs text-slate-300 space-y-1">
-        <div className="flex items-center gap-1.5 text-sky-400 font-bold text-[11px] uppercase tracking-wider">
-          <AlertCircle className="w-3.5 h-3.5" />
-          <span>Real Route Advisory ({weatherData?.name} ➔ {destination.name})</span>
         </div>
-        <p className="text-[11px] leading-relaxed text-slate-300">
-          {pop > 50
-            ? `High rainfall probability (${pop}%) active in ${destination.name}. Flight and highway traffic may experience holding patterns.`
-            : tempDelta < -8
-            ? `Significant temperature drop of ${Math.abs(tempDelta)}°C from ${weatherData?.name}. Carry thermal wear for evening arrival.`
-            : `Favorable travel conditions in ${destination.name} with ${currentDest.temp}°C and calm winds.`}
-        </p>
-      </div>
+      )}
 
       {/* Tap prompt */}
-      <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400 group-hover:text-sky-400 transition">
+      <div 
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect?.('travel_packing');
+        }}
+        className="mt-3 flex items-center justify-between text-[11px] text-slate-400 hover:text-cyan-400 transition"
+      >
         <span>Tap to view live flight routes & highway weather radar</span>
         <ExternalLink className="w-3 h-3" />
       </div>

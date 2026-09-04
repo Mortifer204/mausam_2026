@@ -24,12 +24,12 @@ export function ModalSheet({ isOpen, onClose, title, subtitle, children }) {
       />
 
       {/* Sheet Content */}
-      <div className="relative z-10 w-full max-w-md max-h-[90vh] flex flex-col bg-[#0b1222] border-t sm:border border-white/15 rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up">
+      <div className="relative z-10 w-full max-w-md max-h-[90vh] flex flex-col bg-[#111A2E]/95 backdrop-blur-2xl border-t sm:border border-white/[0.08] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up">
         {/* Drag Pill for Mobile */}
         <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mt-3 sm:hidden" />
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-3 pb-3 border-b border-white/10">
+        <div className="flex items-center justify-between px-5 pt-3 pb-3 border-b border-white/[0.08]">
           <div>
             <h3 className="text-base font-bold text-white tracking-tight">{title}</h3>
             {subtitle && <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>}
