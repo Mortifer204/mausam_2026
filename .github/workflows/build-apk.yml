@@ -47,8 +47,8 @@ jobs:
 
       - name: Copy Web Assets to Capacitor Android
         run: |
-          npm run cap copy android
-          npm run cap sync android || echo "Capacitor sync completed with warnings, proceeding to build"
+          node node_modules/@capacitor/cli/bin/capacitor copy android
+          test -f android/app/src/main/assets/capacitor.plugins.json || echo "[]" > android/app/src/main/assets/capacitor.plugins.json
 
       - name: Build Debug APK with Gradle
         working-directory: android
