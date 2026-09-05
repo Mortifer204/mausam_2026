@@ -9,11 +9,13 @@
     "dev:client": "vite",
     "start": "node server/server.js",
     "build": "vite build",
+    "cap": "cap",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.1",
+    "@capacitor/cli": "^8.5.1",
     "@capacitor/core": "^8.5.1",
     "@vitejs/plugin-react": "^6.1.0",
     "autoprefixer": "^10.5.4",
@@ -33,7 +35,6 @@
     "vite": "^8.2.2"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.5.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "oxlint": "^1.79.0"
