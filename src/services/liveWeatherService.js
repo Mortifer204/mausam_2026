@@ -83,7 +83,7 @@ export async function reverseGeocodeCoords(lat, lon) {
 export async function fetchRealtimeWeather(lat, lon, placeName = "Current Location", stateName = "India", districtName = "") {
   try {
     // 1. Fetch Forecast & Meteorology
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,weather_code,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max&timezone=auto`;
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,weather_code,cloud_cover,is_day,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,weather_code,cloud_cover,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max&timezone=auto`;
     
     // 2. Fetch Air Quality
     const aqiUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=pm10,pm2_5,us_aqi`;
@@ -106,7 +106,38 @@ export async function fetchRealtimeWeather(lat, lon, placeName = "Current Locati
     const realWaveHeight = hasCoastline ? +(marineData.wave_height).toFixed(1) : null;
     const realWavePeriod = hasCoastline && marineData.wave_period ? +(marineData.wave_period).toFixed(1) : null;
 
-    const wmo = WMO_CODE_MAP[current.weather_code] || { condition: "Partly Cloudy", code: "pleasant", icon: "CloudSun" };
+    const precip = +(current.precipitation ?? current.rain ?? 0);
+    const cloudCover = +(current.cloud_cover ?? 45);
+    const isDay = current.is_day !== undefined ? current.is_day === 1 : true;
+
+    let wmo = WMO_CODE_MAP[current.weather_code] || { condition: "Partly Cloudy", code: "pleasant", icon: "CloudSun" };
+
+    // Ground-Truth Calibration Filter:
+    // If meteorological satellite model predicts trace drizzle/rain (WMO 51/53/55/61/80) but ground precipitation
+    // is non-measurable (< 0.25 mm), calibrate condition according to real cloud cover so citizens don't see false rain:
+    const isRainCode = [51, 53, 55, 61, 63, 65, 80, 81, 82].includes(current.weather_code);
+    if (isRainCode && precip < 0.25) {
+      if (cloudCover < 35) {
+        wmo = { 
+          condition: isDay ? "Mainly Clear" : "Clear Sky", 
+          code: "clear", 
+          icon: isDay ? "Sun" : "Moon" 
+        };
+      } else if (cloudCover < 75) {
+        wmo = { 
+          condition: isDay ? "Partly Cloudy" : "Partly Cloudy", 
+          code: "pleasant", 
+          icon: isDay ? "CloudSun" : "CloudMoon" 
+        };
+      } else {
+        wmo = { 
+          condition: "Overcast", 
+          code: "overcast", 
+          icon: "Cloud" 
+        };
+      }
+    }
+
     const temp = Math.round(current.temperature_2m ?? 26);
     const feelsLike = Math.round(current.apparent_temperature ?? temp);
     const humidity = Math.round(current.relative_humidity_2m ?? 65);
@@ -131,7 +162,14 @@ export async function fetchRealtimeWeather(lat, lon, placeName = "Current Locati
       for (let i = nowHour; i < nowHour + 12 && i < hourly.time.length; i++) {
         const timeStr = i === nowHour ? "Now" : `${i % 12 === 0 ? 12 : i % 12} ${i >= 12 ? "PM" : "AM"}`;
         const hCode = hourly.weather_code?.[i] ?? 0;
-        const hWmo = WMO_CODE_MAP[hCode] || { condition: "Cloudy", icon: "Cloud" };
+        const hPrecip = +(hourly.precipitation?.[i] ?? 0);
+        const hCloud = +(hourly.cloud_cover?.[i] ?? 40);
+        let hWmo = WMO_CODE_MAP[hCode] || { condition: "Cloudy", icon: "Cloud" };
+        if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(hCode) && hPrecip < 0.25) {
+          if (hCloud < 40) hWmo = { condition: "Mainly Clear", icon: "Sun" };
+          else if (hCloud < 75) hWmo = { condition: "Partly Cloudy", icon: "CloudSun" };
+          else hWmo = { condition: "Overcast", icon: "Cloud" };
+        }
         formattedHourly.push({
           time: timeStr,
           temp: Math.round(hourly.temperature_2m[i]),
@@ -169,7 +207,7 @@ export async function fetchRealtimeWeather(lat, lon, placeName = "Current Locati
     const fitStatus = runningScore >= 80 ? "Prime Conditions" : runningScore >= 60 ? "Moderate" : "Suboptimal";
 
     // 2. Farming
-    const soilMoistureEst = Math.min(90, Math.max(25, Math.round(humidity * 0.75 + (current.precipitation > 0 ? 20 : 0))));
+    const soilMoistureEst = Math.min(90, Math.max(25, Math.round(humidity * 0.75 + (precip >= 0.25 ? 20 : 0))));
     const frostRisk = minTemp <= 4 ? "High Risk" : minTemp <= 8 ? "Moderate Risk" : "Zero Risk";
 
     // 3. Commuting
@@ -178,7 +216,7 @@ export async function fetchRealtimeWeather(lat, lon, placeName = "Current Locati
 
     // 4. Alerts (MoES / IMD official threshold logic)
     const alerts = [];
-    if (wmo.code === "thunder" || windGust >= 45 || current.precipitation >= 15) {
+    if (wmo.code === "thunder" || windGust >= 45 || precip >= 15) {
       alerts.push({
         id: `imd_live_alert_${Date.now()}`,
         level: "orange",
@@ -256,6 +294,8 @@ export async function fetchRealtimeWeather(lat, lon, placeName = "Current Locati
         uv: uvMax,
         pressure,
         visibility: visibilityKm,
+        precipitation: precip,
+        cloudCover: cloudCover,
         dewPoint: Math.round(temp - ((100 - humidity) / 5)),
         sunrise: daily.sunrise?.[0]?.split("T")?.[1] || "06:10 AM",
         sunset: daily.sunset?.[0]?.split("T")?.[1] || "06:40 PM",
@@ -338,8 +378,8 @@ export async function fetchRealtimeWeather(lat, lon, placeName = "Current Locati
             : `${placeName} is an inland region with no oceanic coastline. Marine surf and tide metrics apply only to coastal stations.`
         },
         events: {
-          feasibilityScore: Math.max(20, Math.min(95, Math.round(95 - (current.precipitation > 0 ? 50 : 0) - (windSpeed > 25 ? 20 : 0)))),
-          rating: current.precipitation > 0 ? "Rain Risk" : "Good Event Weather",
+          feasibilityScore: Math.max(20, Math.min(95, Math.round(95 - (precip >= 0.25 ? 50 : 0) - (windSpeed > 25 ? 20 : 0)))),
+          rating: precip >= 0.25 ? "Rain Risk" : "Good Event Weather",
           criticalWindow: "Check live radar before setup",
           recommendation: "Ensure outdoor canopies are anchored if wind exceeds 20 km/h."
         }
