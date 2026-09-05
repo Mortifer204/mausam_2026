@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useAuth } from './AuthContext';
+import { API_BASE_URL } from '../config/api';
 
 const PersonalizationContext = createContext();
 
@@ -51,7 +52,7 @@ export function PersonalizationProvider({ children }) {
     }
 
     if (user && !user.isGuest && user.email) {
-      fetch(`/api/user/preferences?email=${encodeURIComponent(user.email)}`)
+      fetch(`${API_BASE_URL}/api/user/preferences?email=${encodeURIComponent(user.email)}`)
         .then(res => res.json())
         .then(data => {
           if (data.preferences) {
@@ -110,7 +111,7 @@ export function PersonalizationProvider({ children }) {
     }
 
     // Save to backend disk
-    fetch('/api/user/preferences', {
+    fetch(`${API_BASE_URL}/api/user/preferences`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: user.email, preferences: prefs })

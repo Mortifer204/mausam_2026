@@ -6,6 +6,7 @@ import {
   searchCitiesApi,
   fetchIpLocationFallback
 } from '../services/liveWeatherService';
+import { API_BASE_URL } from '../config/api';
 
 const WeatherContext = createContext();
 
@@ -78,7 +79,7 @@ export function WeatherProvider({ children }) {
       }
     }));
 
-    fetch('/api/user/preferences', {
+    fetch(`${API_BASE_URL}/api/user/preferences`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -112,7 +113,7 @@ export function WeatherProvider({ children }) {
     if (!user || user.isGuest || !user.email) return;
 
     let isMounted = true;
-    fetch(`/api/user/preferences?email=${encodeURIComponent(user.email)}`)
+    fetch(`${API_BASE_URL}/api/user/preferences?email=${encodeURIComponent(user.email)}`)
       .then(res => res.json())
       .then(async data => {
         if (!isMounted) return;
