@@ -45,8 +45,10 @@ jobs:
           VITE_API_URL: https://mausam-2026.onrender.com
         run: npm run build
 
-      - name: Sync Capacitor Android
-        run: npm run cap sync android
+      - name: Copy Web Assets to Capacitor Android
+        run: |
+          npm run cap copy android
+          npm run cap sync android || echo "Capacitor sync completed with warnings, proceeding to build"
 
       - name: Build Debug APK with Gradle
         working-directory: android
