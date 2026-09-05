@@ -16,6 +16,7 @@ import {
 import { useWeather } from '../context/WeatherContext';
 import { usePersonalization } from '../context/PersonalizationContext';
 import { searchCitiesApi } from '../services/liveWeatherService';
+import { Weather3DIcon } from '../components/common/Weather3DIcon';
 
 export function SavedLocationsScreen({ onSelectLocation }) {
   const { 
@@ -178,60 +179,101 @@ export function SavedLocationsScreen({ onSelectLocation }) {
                 changeLocation(loc.id);
                 onSelectLocation?.();
               }}
-              className={`mausam-card-interactive rounded-3xl p-4 border cursor-pointer relative overflow-hidden transition-all ${
+              className={`group relative overflow-hidden rounded-[26px] p-4 transition-all duration-300 cursor-pointer backdrop-blur-2xl ${
                 isSelected 
-                  ? 'border-cyan-400 bg-cyan-500/15 shadow-glow-cyan' 
-                  : 'border-white/[0.08]'
+                  ? 'weather-card-glass-active' 
+                  : 'weather-card-glass'
               }`}
             >
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-base font-bold text-white">{loc.name}</span>
+              {/* Subtle ambient light highlight inside card */}
+              <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/[0.03] rounded-full blur-2xl pointer-events-none" />
+
+              {/* Main Top Section: 3D Weather Illustration + Location Details + Glassy Gradient Temperature */}
+              <div className="flex items-center gap-3 relative z-10">
+                {/* Left: 3D Weather Illustration */}
+                <div className="shrink-0 flex items-center justify-center -ml-1">
+                  <Weather3DIcon
+                    conditionCode={loc.current?.conditionCode || ''}
+                    condition={loc.current?.condition || loc.condition || ''}
+                    className="w-14 h-14 sm:w-16 sm:h-16 group-hover:scale-105 transition-transform duration-300 drop-shadow-md"
+                  />
+                </div>
+
+                {/* Center: Info Column */}
+                <div className="flex-1 min-w-0">
+                  {/* Title & Badges */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-base font-bold text-white tracking-tight truncate">
+                      {loc.name}
+                    </span>
                     {loc.isLive && (
-                      <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wider">
+                      <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wider shrink-0">
                         Live GPS
                       </span>
                     )}
                     {isSelected && (
-                      <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase tracking-wider">
+                      <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase tracking-wider shrink-0">
                         Active
                       </span>
                     )}
                   </div>
-                  <div className="text-xs text-slate-400 mt-0.5">{loc.state} • {loc.type}</div>
+
+                  {/* Subtitle: State & Hub Type */}
+                  <div className="text-xs text-slate-400 font-medium truncate mt-0.5">
+                    {loc.state} • {loc.type}
+                  </div>
+
+                  {/* Condition & Wind Preview matching reference layout */}
+                  <div className="flex items-center gap-2 mt-1 text-xs text-slate-300 font-medium">
+                    <span className="truncate">{loc.current?.condition ?? loc.condition ?? "Clear"}</span>
+                    <span className="text-slate-600 shrink-0">•</span>
+                    <span className="text-slate-400 flex items-center gap-1 shrink-0 font-sans">
+                      <span className="text-[10px] text-cyan-400">➤</span> {loc.current?.windSpeed ?? 10} km/h
+                    </span>
+                  </div>
                 </div>
 
-                <div className="text-right">
-                  <span className="text-2xl font-extrabold text-white">{loc.current?.temp ?? loc.temp ?? "--"}°C</span>
-                  <div className="text-[11px] text-slate-300 font-medium">{loc.current?.condition ?? loc.condition ?? "Clear"}</div>
+                {/* Right: Glassy Liquid Metallic Gradient Temperature */}
+                <div className="text-right shrink-0 select-none pl-1">
+                  <div className="text-4xl sm:text-5xl font-normal tracking-tight text-glass-gradient leading-none">
+                    {loc.current?.temp ?? loc.temp ?? "--"}°
+                  </div>
+                  <div className="text-[10px] font-semibold text-slate-400/80 uppercase tracking-wider mt-1 text-right">
+                    {loc.current?.condition ?? loc.condition ?? "Clear"}
+                  </div>
                 </div>
               </div>
 
-              {/* Sub metrics */}
-              <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-[11px]">
-                <div className="flex items-center gap-2">
-                  <span className={`font-bold ${(loc.current?.aqi || 50) > 150 ? 'text-rose-400' : 'text-emerald-400'}`}>
+              {/* Frosted Divider & Full Detail Sub-Metrics */}
+              <div className="mt-3 pt-2.5 border-t border-white/[0.08] flex items-center justify-between text-[11px] relative z-10">
+                {/* Metrics: AQI, Humidity, Wind */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`font-bold px-1.5 py-0.5 rounded-md ${
+                    (loc.current?.aqi ?? 45) > 150 
+                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' 
+                      : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                  }`}>
                     AQI {loc.current?.aqi ?? 45}
                   </span>
-                  <span className="text-slate-500">•</span>
+                  <span className="text-slate-600">•</span>
                   <span className="text-slate-300">Humidity {loc.current?.humidity ?? 60}%</span>
-                  <span className="text-slate-500">•</span>
+                  <span className="text-slate-600">•</span>
                   <span className="text-slate-300">Wind {loc.current?.windSpeed ?? 10} km/h</span>
                 </div>
 
-                <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+                {/* Actions: Alert & Bookmark */}
+                <div className="flex items-center gap-2 shrink-0 ml-2" onClick={e => e.stopPropagation()}>
                   {hasOrangeAlert && (
-                    <span className="text-[10px] font-bold text-orange-400 bg-orange-500/15 px-1.5 py-0.5 rounded flex items-center gap-1">
-                      <AlertTriangle className="w-2.5 h-2.5" /> Alert
+                    <span className="text-[10px] font-bold text-amber-300 bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded-md flex items-center gap-1">
+                      <AlertTriangle className="w-2.5 h-2.5 text-amber-400" /> Alert
                     </span>
                   )}
                   <button
                     onClick={() => toggleSavedLocation(loc.id)}
-                    className="p-1 rounded text-slate-400 hover:text-white transition"
+                    className="p-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white transition active:scale-95"
                     title={isSaved ? "Remove from saved" : "Save location"}
                   >
-                    <Bookmark className={`w-4 h-4 ${isSaved ? 'text-sky-400 fill-sky-400' : ''}`} />
+                    <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'text-cyan-400 fill-cyan-400' : ''}`} />
                   </button>
                 </div>
               </div>

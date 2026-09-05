@@ -92,4 +92,39 @@
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
+
+  /* Glassmorphic weather card with dark gradient and top highlight matching redesign specification */
+  .weather-card-glass {
+    background: linear-gradient(145deg, rgba(28, 41, 61, 0.82) 0%, rgba(18, 27, 41, 0.88) 55%, rgba(10, 16, 26, 0.94) 100%);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 1.625rem; /* 26px */
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.14), 0 12px 30px -4px rgba(0, 0, 0, 0.52);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .weather-card-glass:hover {
+    background: linear-gradient(145deg, rgba(34, 49, 72, 0.88) 0%, rgba(22, 33, 50, 0.92) 55%, rgba(13, 20, 32, 0.96) 100%);
+    border-color: rgba(255, 255, 255, 0.22);
+    border-top-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 16px 36px -6px rgba(0, 0, 0, 0.6);
+  }
+
+  .weather-card-glass-active {
+    background: linear-gradient(145deg, rgba(24, 46, 75, 0.88) 0%, rgba(15, 31, 52, 0.92) 55%, rgba(10, 20, 34, 0.96) 100%);
+    border: 1px solid rgba(6, 182, 212, 0.55);
+    border-top: 1px solid rgba(125, 211, 252, 0.7);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.25), 0 0 24px rgba(6, 182, 212, 0.22), 0 14px 34px -4px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Liquid metallic glass text gradient matching redesign reference */
+  .text-glass-gradient {
+    background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 38%, rgba(148, 163, 184, 0.45) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
